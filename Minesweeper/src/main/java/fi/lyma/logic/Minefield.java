@@ -1,9 +1,6 @@
 package fi.lyma.logic;
 
-import java.util.Random;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Minefield {
 
@@ -12,22 +9,29 @@ public class Minefield {
     private final int fieldHeight;
     private final int totalNumberOfMines;
     private boolean minesPlaced;
+    private Random random;
 
-    public Minefield(int fieldWidth, int fieldHeight, int totalNumberOfMines) {
+    public Minefield(int fieldWidth, int fieldHeight, int totalNumberOfMines, Random random) {
         this.fieldWidth = fieldWidth;
         this.fieldHeight = fieldHeight;
         this.totalNumberOfMines = totalNumberOfMines;
         this.minesPlaced = false;
+        this.random = random;
+        mines = new Tile[fieldHeight][fieldWidth];
+        for (int x = 0; x < fieldWidth; ++x) {
+            for (int y = 0; y < fieldHeight; ++y) {
+                mines[y][x] = new Tile(x, y);
+            }
+        }
     }
 
     public boolean openTile(int x, int y) {
+        if(!minesPlaced) {
+            throw new IllegalStateException("placeMines has to be called first");
+        }
         checkForOutOfBounds(x, y);
         Tile openedTile = mines[y][x];
-        if (!minesPlaced) {
-            minesPlaced = true;
-            placeMines(x, y);
-        }
-        if(openedTile.hasBomb()) {
+        if(openedTile.containsBomb()) {
             return false;
         }
         cascadeOpen(openedTile);
@@ -45,17 +49,17 @@ public class Minefield {
 
     private void cascadeOpen(Tile start) {
         boolean checkedTiles[][] = new boolean[fieldHeight][fieldWidth];
-        Stack<Tile> tilesToCheck = new Stack<>();
-        tilesToCheck.push(start);
-        while (!tilesToCheck.empty()) {
-            Tile tile = tilesToCheck.pop();
+        Queue<Tile> tilesToCheck = new ArrayDeque<>();
+        tilesToCheck.add(start);
+        while (!tilesToCheck.isEmpty()) {
+            Tile tile = tilesToCheck.poll();
             if (numberOfSurroundingMines(tile) != 0) {
                 continue;
             }
             for (Tile adjacent : getAdjacentTiles(tile)) {
                 if (!checkedTiles[adjacent.y][adjacent.x]) {
                     checkedTiles[adjacent.y][adjacent.x] = true;
-                    tilesToCheck.push(adjacent);
+                    tilesToCheck.add(adjacent);
                     adjacent.open();
                 }
             }
@@ -63,7 +67,7 @@ public class Minefield {
     }
 
     private boolean isInsideBounds(int x, int y) {
-        return x > 0 && x < fieldWidth && y > 0 && y < fieldHeight;
+        return x >= 0 && x < fieldWidth && y >= 0 && y < fieldHeight;
     }
 
     public Tile getTile(int x, int y) {
@@ -71,24 +75,28 @@ public class Minefield {
         return mines[y][x];
     }
 
-    private void placeMines(int x, int y) {
-        Random random = new Random();
+    public void placeMines(int x, int y) {
+        if (minesPlaced) {
+            return;
+        }
+        checkForOutOfBounds(x, y);
+        minesPlaced = true;
         int minesToPlace = totalNumberOfMines;
         while (minesToPlace > 0) {
             int mineX = random.nextInt(fieldWidth);
             int mineY = random.nextInt(fieldHeight);
-            if (!mines[y][x].hasBomb() && x != mineX && y != mineY) {
+            if (!mines[mineY][mineX].containsBomb() && !(x == mineX && y == mineY)) {
                 --minesToPlace;
-                mines[y][x].placeBomb();
+                mines[mineY][mineX].placeBomb();
             }
         }
     }
 
-    private int numberOfSurroundingMines(Tile tile) {
+    private int numberOfSurroundingMines(Tile center) {
         int numberOfMines = 0;
-        List<Tile> tiles = getAdjacentTiles(tile);
-        for(Tile i : tiles) {
-            numberOfMines += i.hasBomb() ? 1 : 0;
+        List<Tile> tiles = getAdjacentTiles(center);
+        for(Tile tile : tiles) {
+            numberOfMines += tile.containsBomb() ? 1 : 0;
         }
         return numberOfMines;
     }
@@ -99,13 +107,24 @@ public class Minefield {
                 if(i == 0 && j == 0) {
                     continue;
                 }
-                int dx = tile.x - i;
-                int dy = tile.y - j;
+                int dx = tile.x + i;
+                int dy = tile.y + j;
                 if(isInsideBounds(dx, dy)) {
                     adjacentTiles.add(mines[dy][dx]);
                 }
             }
         }
         return adjacentTiles;
+    }
+    public int getFieldWidth() {
+        return fieldWidth;
+    }
+
+    public int getFieldHeight() {
+        return fieldHeight;
+    }
+
+    public int getTotalNumberOfMines() {
+        return totalNumberOfMines;
     }
 }

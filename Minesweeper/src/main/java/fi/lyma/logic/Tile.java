@@ -10,23 +10,23 @@ public class Tile {
         FLAG
     }
 
-    private boolean hasBomb;
+    private boolean containsBomb;
     private TileStatus status;
     public final int x,y;
 
     public Tile(int x, int y) {
         status = TileStatus.CLOSED;
-        hasBomb = false;
+        containsBomb = false;
         this.x = x;
         this.y = y;
     }
 
-    public boolean hasBomb() {
-        return hasBomb;
+    public boolean containsBomb() {
+        return containsBomb;
     }
 
     public void placeBomb() {
-        this.hasBomb = true;
+        containsBomb = true;
     }
 
     public TileStatus getStatus() {
