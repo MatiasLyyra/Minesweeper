@@ -6,3 +6,4 @@ Päivä | Tunnit | Kuvaus
 25.01.2016 | 2h | Pelilogiikan korjaaminen ja yksikkötestauksien tekeminen
 26.01.2016 | 1.5h | Lisää muutoksia pelilogiikkaan ja yksikkötestejä
 26.01.2016 | 2h | Kattavammat yksikkötestit sekä MinesweeperGame luokan luonti
+26.01.2016 | 0.5h | Dokumentaation yms tekemistä
