@@ -7,6 +7,8 @@ public interface ImmutableTile {
 
     public int getNumberOfSurroundingMines();
 
+    public boolean canBeOpened();
+
     public int getX();
 
     public int getY();

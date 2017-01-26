@@ -37,17 +37,22 @@ public class Minefield {
         checkMinesArePlaced();
         throwExceptionIfOutOfBounds(x, y);
         Tile openedTile = mines[y][x];
-        if (openedTile.containsBomb()) {
-            return false;
+        boolean containsBomb = openedTile.containsBomb();
+        if (openedTile.canBeOpened() && !containsBomb) {
+            cascadeOpen(openedTile);
         }
-        markTileOpen(openedTile);
-        cascadeOpen(openedTile);
-        return true;
+        return containsBomb;
+    }
+
+    public void flagTile(int x, int y) {
+        throwExceptionIfOutOfBounds(x, y);
+        mines[y][x].flag();
     }
 
     private void cascadeOpen(Tile start) {
         boolean checkedTiles[][] = new boolean[fieldHeight][fieldWidth];
         checkedTiles[start.getY()][start.getX()] = true;
+        markTileOpen(start);
 
         Queue<Tile> tilesToCheck = new ArrayDeque<>();
         tilesToCheck.add(start);
@@ -88,7 +93,6 @@ public class Minefield {
     }
 
     public ImmutableTile getTile(int x, int y) {
-        checkMinesArePlaced();
         throwExceptionIfOutOfBounds(x, y);
         return mines[y][x];
     }

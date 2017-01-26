@@ -1,6 +1,7 @@
 package fi.lyma.logic;
 
 import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,6 +11,7 @@ import org.junit.Test;
  */
 public class TileTest {
     Tile tile;
+
     @Before
     public void setup() {
         tile = new Tile(0, 0);
@@ -29,5 +31,19 @@ public class TileTest {
         assertEquals(Tile.TileStatus.OPEN, tile.getStatus());
         tile.placeBomb();
         assertTrue(tile.containsBomb());
+    }
+
+    @Test
+    public void flaggingWorks() {
+        assertTrue(tile.canBeOpened());
+        assertEquals(Tile.TileStatus.CLOSED, tile.getStatus());
+        tile.flag();
+        assertFalse(tile.canBeOpened());
+        assertEquals(Tile.TileStatus.FLAG, tile.getStatus());
+        tile.flag();
+        assertTrue(tile.canBeOpened());
+        assertEquals(Tile.TileStatus.QUESTION, tile.getStatus());
+        tile.flag();
+        assertEquals(Tile.TileStatus.CLOSED, tile.getStatus());
     }
 }

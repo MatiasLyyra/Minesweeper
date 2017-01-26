@@ -8,9 +8,6 @@ import org.junit.Test;
 
 import java.util.Random;
 
-/**
- * Created by lyma on 24.1.2017.
- */
 public class MinefieldTest {
     private Minefield minefield;
 
@@ -19,10 +16,6 @@ public class MinefieldTest {
         minefield = new Minefield(10, 10, 50, new Random());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void placeMinesExceptionLowerBound() {
-        minefield.placeMines(-1, -1);
-    }
 
     @Test
     public void firstOpenedTileIsNotMine() {
@@ -47,11 +40,6 @@ public class MinefieldTest {
         assertEquals(3, mines);
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void openTileIllegalState() {
-        minefield.openTile(0, 0);
-    }
-
     @Test
     public void openTileReturnsCorrectValue() {
         RandomMock mock = new RandomMock(1, 1, 0, 0);
@@ -59,8 +47,8 @@ public class MinefieldTest {
         minefield.placeMines(0, 1);
         boolean mineOnTile1 = minefield.openTile(0, 1);
         boolean mineOnTile2 = minefield.openTile(1, 1);
-        assertTrue(mineOnTile1);
-        assertFalse(mineOnTile2);
+        assertFalse(mineOnTile1);
+        assertTrue(mineOnTile2);
     }
 
     @Test
@@ -142,5 +130,94 @@ public class MinefieldTest {
                 }
             }
         }
+    }
+
+    @Test
+    public void flaggingTileWorks() {
+        minefield.placeMines(0,0);
+        minefield.flagTile(0,0);
+        assertEquals(Tile.TileStatus.FLAG, minefield.getTile(0,0).getStatus());
+        minefield.flagTile(0,0);
+        assertEquals(Tile.TileStatus.QUESTION, minefield.getTile(0,0).getStatus());
+        minefield.flagTile(0,0);
+        assertEquals(Tile.TileStatus.CLOSED, minefield.getTile(0,0).getStatus());
+    }
+
+    @Test
+    public void cannotFlagOpenTile() {
+        minefield.placeMines(0,0);
+        minefield.openTile(0, 0);
+        minefield.flagTile(0,0);
+        assertEquals(Tile.TileStatus.OPEN, minefield.getTile(0, 0).getStatus());
+    }
+
+    //Tests for invalid input
+
+    @Test(expected = IllegalArgumentException.class)
+    public void constructorIllegalArgumentZeroWidth() {
+        minefield = new Minefield(0, 10, 8, new Random());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void constructorIllegalArgumentZeroHeight() {
+        minefield = new Minefield(10, 0, 8, new Random());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void constructorIllegalArgumentNegativeNumberOfMines() {
+        minefield = new Minefield(10, 0, -1, new Random());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void constructorIllegalArgumentEqualNumberOfTilesAndMines() {
+        minefield = new Minefield(10,10, 100, new Random());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void constructorIllegalArgumentZeroMines() {
+        minefield = new Minefield(10,10,0, new Random());
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void openTileIllegalState() {
+        minefield.openTile(0, 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void placeMinesExceptionLowerBound() {
+        minefield.placeMines(-1, -1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getTileIllegalArgumentNegativeValues() {
+        minefield.getTile(-1, -1);
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void getTileIllegalArgumentGreaterThanWidthAndHeight() {
+        minefield.getTile(minefield.getFieldWidth(), minefield.getFieldHeight());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void flagTileIllegalArgumentNegativeValues() {
+        minefield.flagTile(-1, -1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void flagTileIllegalArgumentGreaterThanWidthAndHeight() {
+        minefield.flagTile(minefield.getFieldWidth(), minefield.getFieldHeight());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void openTileTileIllegalArgumentGreaterThanWidthAndHeight() {
+        minefield.placeMines(0,0);
+        minefield.openTile(0,0);
+        minefield.openTile(minefield.getFieldWidth(), minefield.getFieldHeight());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void openTileIllegalArgumentNegativeValues() {
+        minefield.placeMines(0,0);
+        minefield.openTile(0,0);
+        minefield.openTile(-1, -1);
     }
 }

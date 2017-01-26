@@ -6,7 +6,8 @@ public class Tile implements ImmutableTile {
     public enum TileStatus {
         CLOSED,
         OPEN,
-        FLAG
+        FLAG,
+        QUESTION
     }
 
     private final int x;
@@ -14,6 +15,7 @@ public class Tile implements ImmutableTile {
     private boolean containsBomb;
     private int surroundingMines;
     private TileStatus status;
+
     public Tile(int x, int y) {
         status = TileStatus.CLOSED;
         containsBomb = false;
@@ -36,7 +38,22 @@ public class Tile implements ImmutableTile {
     }
 
     public void flag() {
-        status = TileStatus.FLAG;
+        switch (status) {
+            case CLOSED:
+                status = TileStatus.FLAG;
+                break;
+            case FLAG:
+                status = TileStatus.QUESTION;
+                break;
+            case QUESTION:
+                status = TileStatus.CLOSED;
+                break;
+        }
+    }
+
+    @Override
+    public boolean canBeOpened() {
+        return status == TileStatus.CLOSED || status == TileStatus.QUESTION;
     }
 
     public void open() {
