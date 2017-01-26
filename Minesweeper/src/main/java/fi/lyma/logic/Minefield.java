@@ -9,15 +9,23 @@ public class Minefield {
     private final int fieldHeight;
     private final int totalNumberOfMines;
     private boolean minesPlaced;
+    private int tilesRemaining;
     private Random random;
 
     public Minefield(int fieldWidth, int fieldHeight, int totalNumberOfMines, Random random) {
+        if (fieldWidth <= 0 || fieldHeight <= 0) {
+            throw new IllegalArgumentException("fieldWidth and fieldHeight must be greater than 0");
+        }
+        if (totalNumberOfMines >= fieldWidth * fieldHeight || totalNumberOfMines <= 0) {
+            throw new IllegalArgumentException("totalNumberOfMines must be less than fieldWidth*fieldHeight and greater than 0");
+        }
         this.fieldWidth = fieldWidth;
         this.fieldHeight = fieldHeight;
         this.totalNumberOfMines = totalNumberOfMines;
         this.minesPlaced = false;
         this.random = random;
-        mines = new Tile[fieldHeight][fieldWidth];
+        this.tilesRemaining = fieldWidth * fieldHeight - totalNumberOfMines;
+        this.mines = new Tile[fieldHeight][fieldWidth];
         for (int x = 0; x < fieldWidth; ++x) {
             for (int y = 0; y < fieldHeight; ++y) {
                 mines[y][x] = new Tile(x, y);
@@ -26,52 +34,62 @@ public class Minefield {
     }
 
     public boolean openTile(int x, int y) {
-        if(!minesPlaced) {
-            throw new IllegalStateException("placeMines has to be called first");
-        }
-        checkForOutOfBounds(x, y);
+        checkMinesArePlaced();
+        throwExceptionIfOutOfBounds(x, y);
         Tile openedTile = mines[y][x];
-        if(openedTile.containsBomb()) {
+        if (openedTile.containsBomb()) {
             return false;
         }
+        markTileOpen(openedTile);
         cascadeOpen(openedTile);
         return true;
     }
 
-    private void checkForOutOfBounds(int x, int y) {
-        if (x < 0 || x >= fieldWidth) {
-            throw new IllegalArgumentException("x must be within 0-fieldWidth (upper bound exclusive)");
-        }
-        if (y < 0 || y >= fieldHeight) {
-            throw new IllegalArgumentException("y must be within 0-fieldHeight (upper bound exclusive)");
-        }
-    }
-
     private void cascadeOpen(Tile start) {
         boolean checkedTiles[][] = new boolean[fieldHeight][fieldWidth];
+        checkedTiles[start.getY()][start.getX()] = true;
+
         Queue<Tile> tilesToCheck = new ArrayDeque<>();
         tilesToCheck.add(start);
         while (!tilesToCheck.isEmpty()) {
             Tile tile = tilesToCheck.poll();
-            if (numberOfSurroundingMines(tile) != 0) {
+            if (tile.getNumberOfSurroundingMines() > 0) {
                 continue;
             }
-            for (Tile adjacent : getAdjacentTiles(tile)) {
-                if (!checkedTiles[adjacent.y][adjacent.x]) {
-                    checkedTiles[adjacent.y][adjacent.x] = true;
+            for (Tile adjacent : getAdjacentTiles(tile.getX(), tile.getY())) {
+                if (!checkedTiles[adjacent.getY()][adjacent.getX()]) {
+                    checkedTiles[adjacent.getY()][adjacent.getX()] = true;
                     tilesToCheck.add(adjacent);
-                    adjacent.open();
+                    markTileOpen(adjacent);
                 }
             }
         }
+    }
+
+    private void markTileOpen(Tile tile) {
+        tilesRemaining--;
+        tile.open();
     }
 
     private boolean isInsideBounds(int x, int y) {
         return x >= 0 && x < fieldWidth && y >= 0 && y < fieldHeight;
     }
 
-    public Tile getTile(int x, int y) {
-        checkForOutOfBounds(x, y);
+    private void throwExceptionIfOutOfBounds(int x, int y) {
+        if (!isInsideBounds(x, y)) {
+            throw new IllegalArgumentException("x and y must be inside the bounds");
+        }
+    }
+
+    private void checkMinesArePlaced() {
+        if (!minesPlaced) {
+            throw new IllegalStateException("placeMines has to be called first");
+        }
+    }
+
+    public ImmutableTile getTile(int x, int y) {
+        checkMinesArePlaced();
+        throwExceptionIfOutOfBounds(x, y);
         return mines[y][x];
     }
 
@@ -79,7 +97,7 @@ public class Minefield {
         if (minesPlaced) {
             return;
         }
-        checkForOutOfBounds(x, y);
+        throwExceptionIfOutOfBounds(x, y);
         minesPlaced = true;
         int minesToPlace = totalNumberOfMines;
         while (minesToPlace > 0) {
@@ -90,32 +108,42 @@ public class Minefield {
                 mines[mineY][mineX].placeBomb();
             }
         }
+        calculateNumberOFSurroundingMines();
     }
 
-    private int numberOfSurroundingMines(Tile center) {
-        int numberOfMines = 0;
-        List<Tile> tiles = getAdjacentTiles(center);
-        for(Tile tile : tiles) {
-            numberOfMines += tile.containsBomb() ? 1 : 0;
+    private void calculateNumberOFSurroundingMines() {
+        for (int x = 0; x < fieldWidth; ++x) {
+            for (int y = 0; y < fieldHeight; ++y) {
+                int numberOfMines = 0;
+                for (Tile neighbour : getAdjacentTiles(x, y)) {
+                    numberOfMines += neighbour.containsBomb() ? 1 : 0;
+                }
+                mines[y][x].setNumberOfSurroundingMines(numberOfMines);
+            }
         }
-        return numberOfMines;
     }
-    private List<Tile> getAdjacentTiles(Tile tile) {
+
+    private List<Tile> getAdjacentTiles(int x, int y) {
         List<Tile> adjacentTiles = new ArrayList();
         for (int i = -1; i <= 1; ++i) {
             for (int j = -1; j <= 1; ++j) {
-                if(i == 0 && j == 0) {
+                if (i == 0 && j == 0) {
                     continue;
                 }
-                int dx = tile.x + i;
-                int dy = tile.y + j;
-                if(isInsideBounds(dx, dy)) {
+                int dx = x + i;
+                int dy = y + j;
+                if (isInsideBounds(dx, dy)) {
                     adjacentTiles.add(mines[dy][dx]);
                 }
             }
         }
         return adjacentTiles;
     }
+
+    public boolean allEmptyTilesAreOpen() {
+        return tilesRemaining == 0;
+    }
+
     public int getFieldWidth() {
         return fieldWidth;
     }

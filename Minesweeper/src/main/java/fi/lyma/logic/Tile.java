@@ -1,19 +1,19 @@
 package fi.lyma.logic;
 
-/**
- * Created by lyma on 23.1.2017.
- */
-public class Tile {
+
+public class Tile implements ImmutableTile {
+
     public enum TileStatus {
         CLOSED,
         OPEN,
         FLAG
     }
 
+    private final int x;
+    private final int y;
     private boolean containsBomb;
+    private int surroundingMines;
     private TileStatus status;
-    public final int x,y;
-
     public Tile(int x, int y) {
         status = TileStatus.CLOSED;
         containsBomb = false;
@@ -21,6 +21,7 @@ public class Tile {
         this.y = y;
     }
 
+    @Override
     public boolean containsBomb() {
         return containsBomb;
     }
@@ -29,6 +30,7 @@ public class Tile {
         containsBomb = true;
     }
 
+    @Override
     public TileStatus getStatus() {
         return status;
     }
@@ -40,4 +42,24 @@ public class Tile {
     public void open() {
         status = TileStatus.OPEN;
     }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public int getNumberOfSurroundingMines() {
+        return surroundingMines;
+    }
+
+    public void setNumberOfSurroundingMines(int surroundingMines) {
+        this.surroundingMines = surroundingMines;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
 }
