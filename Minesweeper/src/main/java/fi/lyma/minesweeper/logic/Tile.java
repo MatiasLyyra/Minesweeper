@@ -1,4 +1,4 @@
-package fi.lyma.logic;
+package fi.lyma.minesweeper.logic;
 
 import fi.lyma.util.Vector2D;
 

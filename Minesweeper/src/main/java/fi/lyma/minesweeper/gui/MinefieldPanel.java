@@ -1,8 +1,8 @@
-package fi.lyma.gui;
+package fi.lyma.minesweeper.gui;
 
-import fi.lyma.logic.ImmutableTile;
-import fi.lyma.logic.MinesweeperGame;
-import fi.lyma.logic.Tile;
+import fi.lyma.minesweeper.logic.ImmutableTile;
+import fi.lyma.minesweeper.logic.MinesweeperGame;
+import fi.lyma.minesweeper.logic.Tile;
 import fi.lyma.util.Vector2D;
 
 import javax.swing.*;

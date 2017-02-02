@@ -1,7 +1,7 @@
-package fi.lyma.gui;
+package fi.lyma.minesweeper.gui;
 
-import fi.lyma.event.MinefieldMouseListener;
-import fi.lyma.logic.MinesweeperGame;
+import fi.lyma.minesweeper.event.MinefieldMouseListener;
+import fi.lyma.minesweeper.logic.MinesweeperGame;
 
 import javax.swing.*;
 

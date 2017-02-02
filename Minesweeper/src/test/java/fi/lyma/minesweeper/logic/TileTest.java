@@ -1,7 +1,8 @@
-package fi.lyma.logic;
+package fi.lyma.minesweeper.logic;
 
 import static org.junit.Assert.*;
 
+import fi.lyma.minesweeper.logic.Tile;
 import org.junit.Before;
 import org.junit.Test;
 

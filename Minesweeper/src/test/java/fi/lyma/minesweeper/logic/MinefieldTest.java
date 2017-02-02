@@ -1,7 +1,10 @@
-package fi.lyma.logic;
+package fi.lyma.minesweeper.logic;
 
 import static org.junit.Assert.*;
 
+import fi.lyma.minesweeper.logic.ImmutableTile;
+import fi.lyma.minesweeper.logic.Minefield;
+import fi.lyma.minesweeper.logic.Tile;
 import fi.lyma.testutil.RandomMock;
 import fi.lyma.util.Vector2D;
 import org.junit.Before;

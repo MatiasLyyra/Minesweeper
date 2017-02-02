@@ -1,4 +1,4 @@
-package fi.lyma.logic;
+package fi.lyma.minesweeper.logic;
 
 public interface ImmutableTile {
     public Tile.TileStatus getStatus();

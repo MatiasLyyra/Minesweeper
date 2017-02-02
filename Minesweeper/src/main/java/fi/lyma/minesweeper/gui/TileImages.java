@@ -1,6 +1,6 @@
-package fi.lyma.gui;
+package fi.lyma.minesweeper.gui;
 
-import fi.lyma.logic.ImmutableTile;
+import fi.lyma.minesweeper.logic.ImmutableTile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

@@ -1,5 +1,7 @@
-package fi.lyma.logic;
+package fi.lyma.minesweeper.logic;
 
+import fi.lyma.minesweeper.logic.ImmutableTile;
+import fi.lyma.minesweeper.logic.MinesweeperGame;
 import fi.lyma.util.Vector2D;
 
 import static org.junit.Assert.*;
