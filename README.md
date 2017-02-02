@@ -5,3 +5,7 @@ Perinteinen miinaharavapeli, joka on toteutettu Javalla. Lisää tietoa [miinaha
 [aiheen kuvaus](dokumentaatio/aiheenKuvausJaRakenne.md)
 
 [tuntikirjanpito](dokumentaatio/tuntikirjanpito.md)
+
+[pit-raportti](https://htmlpreview.github.io/?https://github.com/MatiasLyyra/Minesweeper/blob/master/dokumentaatio/pit-raportti/index.html)
+
+[checkstyle-raportti](https://htmlpreview.github.io/?https://github.com/MatiasLyyra/Minesweeper/blob/master/dokumentaatio/checkstyle-raportti/checkstyle.html)
