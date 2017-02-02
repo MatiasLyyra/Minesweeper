@@ -22,3 +22,7 @@ Pelaaja voi:
 - katsoa tähän asti kulutetun ajan
 - tallentaa voitettuun peliin käytetyn ajan nimimerkin kanssa
 - katsoa parhaat ajat
+
+**Määrittelyvaiheen luokkakaavio**
+
+![luokkakaavio](luokkakaavio.png)
