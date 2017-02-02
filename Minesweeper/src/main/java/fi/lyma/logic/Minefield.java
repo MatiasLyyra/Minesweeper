@@ -1,10 +1,12 @@
 package fi.lyma.logic;
 
+import fi.lyma.util.Vector2D;
+
 import java.util.*;
 
 public class Minefield {
 
-    private Tile[][] mines;
+    private Tile[][] tiles;
     private final int fieldWidth;
     private final int fieldHeight;
     private final int totalNumberOfMines;
@@ -16,8 +18,9 @@ public class Minefield {
         if (fieldWidth <= 0 || fieldHeight <= 0) {
             throw new IllegalArgumentException("fieldWidth and fieldHeight must be greater than 0");
         }
-        if (totalNumberOfMines >= fieldWidth * fieldHeight || totalNumberOfMines <= 0) {
-            throw new IllegalArgumentException("totalNumberOfMines must be less than fieldWidth*fieldHeight and greater than 0");
+        //Number of mines cannot exceed the total number of cells. Also any adjacent cell to starting position can't be mine
+        if (totalNumberOfMines >= (fieldWidth * fieldHeight - 8) || totalNumberOfMines <= 0) {
+            throw new IllegalArgumentException("totalNumberOfMines must be less than 'fieldWidth*fieldHeight-8' and greater than 0");
         }
         this.fieldWidth = fieldWidth;
         this.fieldHeight = fieldHeight;
@@ -25,28 +28,26 @@ public class Minefield {
         this.minesPlaced = false;
         this.random = random;
         this.tilesRemaining = fieldWidth * fieldHeight - totalNumberOfMines;
-        this.mines = new Tile[fieldHeight][fieldWidth];
+        this.tiles = new Tile[fieldHeight][fieldWidth];
         for (int x = 0; x < fieldWidth; ++x) {
             for (int y = 0; y < fieldHeight; ++y) {
-                mines[y][x] = new Tile(x, y);
+                tiles[y][x] = new Tile(x, y);
             }
         }
     }
 
-    public boolean openTile(int x, int y) {
+    public boolean openTile(Vector2D<Integer> location) {
         checkMinesArePlaced();
-        throwExceptionIfOutOfBounds(x, y);
-        Tile openedTile = mines[y][x];
+        Tile openedTile = tiles[location.getY()][location.getX()];
         boolean containsBomb = openedTile.containsBomb();
         if (openedTile.canBeOpened() && !containsBomb) {
             cascadeOpen(openedTile);
         }
-        return containsBomb;
+        return containsBomb && openedTile.canBeOpened();
     }
 
-    public void flagTile(int x, int y) {
-        throwExceptionIfOutOfBounds(x, y);
-        mines[y][x].flag();
+    public void flagTile(Vector2D<Integer> location) {
+        tiles[location.getY()][location.getX()].flag();
     }
 
     private void cascadeOpen(Tile start) {
@@ -76,15 +77,6 @@ public class Minefield {
         tile.open();
     }
 
-    private boolean isInsideBounds(int x, int y) {
-        return x >= 0 && x < fieldWidth && y >= 0 && y < fieldHeight;
-    }
-
-    private void throwExceptionIfOutOfBounds(int x, int y) {
-        if (!isInsideBounds(x, y)) {
-            throw new IllegalArgumentException("x and y must be inside the bounds");
-        }
-    }
 
     private void checkMinesArePlaced() {
         if (!minesPlaced) {
@@ -92,27 +84,40 @@ public class Minefield {
         }
     }
 
-    public ImmutableTile getTile(int x, int y) {
-        throwExceptionIfOutOfBounds(x, y);
-        return mines[y][x];
+    public ImmutableTile getTile(Vector2D<Integer> location) {
+        return tiles[location.getY()][location.getX()];
     }
 
-    public void placeMines(int x, int y) {
+    public void placeMines(Vector2D<Integer> location) {
         if (minesPlaced) {
             return;
         }
-        throwExceptionIfOutOfBounds(x, y);
         minesPlaced = true;
         int minesToPlace = totalNumberOfMines;
+        List<Tile> adjacentToStart = getAdjacentTiles(location.getX(), location.getY());
+        Tile startingTile = tiles[location.getY()][location.getX()];
         while (minesToPlace > 0) {
             int mineX = random.nextInt(fieldWidth);
             int mineY = random.nextInt(fieldHeight);
-            if (!mines[mineY][mineX].containsBomb() && !(x == mineX && y == mineY)) {
+            Tile mineTile = tiles[mineY][mineX];
+            if (!mineTile.containsBomb() && isValidPositionForBomb(startingTile, mineTile, adjacentToStart)) {
                 --minesToPlace;
-                mines[mineY][mineX].placeBomb();
+                tiles[mineY][mineX].placeBomb();
             }
         }
         calculateNumberOFSurroundingMines();
+    }
+
+    private boolean isValidPositionForBomb(Tile start, Tile other, List<Tile> adjacents) {
+        if (start.equals(other)) {
+            return false;
+        }
+        for (Tile adjacent : adjacents) {
+            if (other.equals(adjacent)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void calculateNumberOFSurroundingMines() {
@@ -122,7 +127,7 @@ public class Minefield {
                 for (Tile neighbour : getAdjacentTiles(x, y)) {
                     numberOfMines += neighbour.containsBomb() ? 1 : 0;
                 }
-                mines[y][x].setNumberOfSurroundingMines(numberOfMines);
+                tiles[y][x].setNumberOfSurroundingMines(numberOfMines);
             }
         }
     }
@@ -134,14 +139,25 @@ public class Minefield {
                 if (i == 0 && j == 0) {
                     continue;
                 }
-                int dx = x + i;
-                int dy = y + j;
-                if (isInsideBounds(dx, dy)) {
-                    adjacentTiles.add(mines[dy][dx]);
+                Vector2D<Integer> adjPos = new Vector2D(x + i, y + j);
+                if (isInsideBounds(adjPos)) {
+                    adjacentTiles.add(tiles[adjPos.getY()][adjPos.getX()]);
                 }
             }
         }
         return adjacentTiles;
+    }
+
+    public boolean isInsideBounds(Vector2D<Integer> position) {
+        return position.getX() >= 0 && position.getX() < fieldWidth && position.getY() >= 0 && position.getY() < fieldHeight;
+    }
+
+    public void revealAllTiles() {
+        for (int x = 0; x < fieldWidth; ++x) {
+            for (int y = 0; y < fieldHeight; ++y) {
+                tiles[y][x].open();
+            }
+        }
     }
 
     public boolean allEmptyTilesAreOpen() {

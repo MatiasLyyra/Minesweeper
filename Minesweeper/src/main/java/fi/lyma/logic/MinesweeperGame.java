@@ -1,8 +1,11 @@
 package fi.lyma.logic;
 
+import fi.lyma.util.Vector2D;
+
 import java.util.Random;
 
 public class MinesweeperGame {
+
     public enum GameStatus {
         NOT_STARTED,
         STARTED,
@@ -11,7 +14,7 @@ public class MinesweeperGame {
     }
 
     private Minefield minefield;
-    private GameStatus status;
+    private GameStatus gameStatus;
     private long startingTime;
     private long endingTime;
 
@@ -20,57 +23,65 @@ public class MinesweeperGame {
     }
 
     public final void createNewField(int fieldWidth, int fieldHeight, int numberOfMines) {
-        status = GameStatus.NOT_STARTED;
+        gameStatus = GameStatus.NOT_STARTED;
         minefield = new Minefield(fieldWidth, fieldHeight, numberOfMines, new Random());
     }
 
-    private void startGame(int x, int y) {
-        status = GameStatus.STARTED;
+    private void startGame(Vector2D<Integer> location) {
+        gameStatus = GameStatus.STARTED;
         startingTime = System.currentTimeMillis();
-        minefield.placeMines(x, y);
+        minefield.placeMines(location);
     }
 
-    public ImmutableTile getTile(int x, int y) {
-        return minefield.getTile(x, y);
+    public ImmutableTile getTile(Vector2D<Integer> location) {
+        ImmutableTile tile = null;
+        if (minefield.isInsideBounds(location)) {
+            tile = minefield.getTile(location);
+        }
+        return tile;
     }
 
-    public void openTile(int x, int y) {
-        if (isGameEnded()) {
+    public void openTile(Vector2D<Integer> location) {
+        if (isGameEnded() || !minefield.isInsideBounds(location)) {
             return;
         }
-        if (GameStatus.NOT_STARTED == status) {
-            startGame(x, y);
+        if (GameStatus.NOT_STARTED == gameStatus) {
+            startGame(location);
         }
-        boolean wasMine = minefield.openTile(x, y);
+        boolean wasMine = minefield.openTile(location);
         checkForGameEnd(wasMine);
     }
 
     private void checkForGameEnd(boolean wasMine) {
         if (wasMine) {
-            status = GameStatus.ENDED_LOSS;
+            minefield.revealAllTiles();
+            gameStatus = GameStatus.ENDED_LOSS;
         } else if (minefield.allEmptyTilesAreOpen()) {
-            status = GameStatus.ENDED_WIN;
+            gameStatus = GameStatus.ENDED_WIN;
         }
         endingTime = System.currentTimeMillis();
     }
 
-    public void flagTile(int x, int y) {
-        if (isGameStarted()) {
-            minefield.flagTile(x, y);
+    public void flagTile(Vector2D<Integer> location) {
+        if (!minefield.isInsideBounds(location)) {
+            return;
+        }
+        if (!isGameEnded()) {
+            minefield.flagTile(location);
         }
     }
 
     public boolean isGameStarted() {
-        return status == GameStatus.STARTED;
+        return gameStatus == GameStatus.STARTED;
     }
 
     public boolean isGameEnded() {
-        return status != GameStatus.ENDED_LOSS || status != GameStatus.ENDED_WIN;
+        return gameStatus == GameStatus.ENDED_LOSS || gameStatus == GameStatus.ENDED_WIN;
     }
 
     public long getTimeSpent() {
         long timeSpent = 0;
-        switch (status) {
+        switch (gameStatus) {
             case ENDED_LOSS:
             case ENDED_WIN:
                 timeSpent = endingTime - startingTime;
@@ -80,5 +91,17 @@ public class MinesweeperGame {
                 break;
         }
         return timeSpent;
+    }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
+    public int getFieldWidth() {
+        return minefield.getFieldWidth();
+    }
+
+    public int getFieldHeight() {
+        return minefield.getFieldHeight();
     }
 }

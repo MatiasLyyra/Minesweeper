@@ -10,15 +10,6 @@ public class RandomMock extends Random {
         this.numbers = numbers;
     }
 
-    public RandomMock(int lowerBound, int upperBound) {
-        int i = 0;
-        numbers = new int[upperBound - lowerBound + 1];
-        for (int j = lowerBound; j <= upperBound; ++j) {
-            numbers[i] = j;
-            i++;
-        }
-    }
-
     @Override
     public int nextInt(int i) {
         return nextInt();

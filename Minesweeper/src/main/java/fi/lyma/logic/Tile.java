@@ -1,5 +1,6 @@
 package fi.lyma.logic;
 
+import fi.lyma.util.Vector2D;
 
 public class Tile implements ImmutableTile {
 
@@ -10,8 +11,7 @@ public class Tile implements ImmutableTile {
         QUESTION
     }
 
-    private final int x;
-    private final int y;
+    private final Vector2D<Integer> position;
     private boolean containsBomb;
     private int surroundingMines;
     private TileStatus status;
@@ -19,8 +19,7 @@ public class Tile implements ImmutableTile {
     public Tile(int x, int y) {
         status = TileStatus.CLOSED;
         containsBomb = false;
-        this.x = x;
-        this.y = y;
+        position = new Vector2D<>(x, y);
     }
 
     @Override
@@ -62,7 +61,7 @@ public class Tile implements ImmutableTile {
 
     @Override
     public int getX() {
-        return x;
+        return position.getX();
     }
 
     @Override
@@ -76,7 +75,20 @@ public class Tile implements ImmutableTile {
 
     @Override
     public int getY() {
-        return y;
+        return position.getY();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tile tile = (Tile) o;
+
+        if (containsBomb != tile.containsBomb) return false;
+        if (surroundingMines != tile.surroundingMines) return false;
+        if (!position.equals(tile.position)) return false;
+        return status == tile.status;
     }
 
 }
