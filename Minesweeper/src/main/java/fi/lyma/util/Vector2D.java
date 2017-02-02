@@ -18,12 +18,18 @@ public class Vector2D<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Vector2D<?> vector2D = (Vector2D<?>) o;
 
-        if (!x.equals(vector2D.x)) return false;
+        if (!x.equals(vector2D.x)) {
+            return false;
+        }
         return y.equals(vector2D.y);
     }
 

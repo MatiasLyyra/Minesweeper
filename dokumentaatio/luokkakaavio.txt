@@ -1,0 +1,24 @@
+@startuml
+left to right direction
+Interface ImmutableTile
+Class Minefield
+Class MinesweeperGame
+Class Tile
+Enum TileStatus {
+ CLOSED,
+ OPEN,
+ FLAG,
+ QUESTION
+}
+Enum GameStatus {
+ NOT_STARTED,
+ STARTED,
+ ENDED_WIN,
+ ENDED_LOSS
+}
+Tile ..|> ImmutableTile
+MinesweeperGame "1" -- "1" Minefield
+Minefield "1" *-- "*" Tile
+Tile "1" -- "1" TileStatus
+MinesweeperGame "1" -- "1" GameStatus
+@enduml

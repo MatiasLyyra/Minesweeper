@@ -32,10 +32,10 @@
                 <version>1.1.8</version>
                 <configuration>
                     <targetClasses>
-                        <param>fi.lyma.logic.*</param>
+                        <param>fi.lyma.minesweeper.logic.*</param>
                     </targetClasses>
                     <targetTests>
-                        <param>fi.lyma.logic.*</param>
+                        <param>fi.lyma.minesweeper.logic.*</param>
                     </targetTests>
                 </configuration>
             </plugin>

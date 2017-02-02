@@ -21,7 +21,7 @@ public class TileImages {
     public static final BufferedImage TILE_QUESTION = loadImage("images/tile_question.png");
     public static final BufferedImage TILE_BOMB = loadImage("images/tile_bomb.png");
     public static final BufferedImage TILE_FLAG = loadImage("images/tile_flag.png");
-    private static final BufferedImage[] openTiles = {TILE_OPEN, TILE_OPEN_1, TILE_OPEN_2, TILE_OPEN_3, TILE_OPEN_4, TILE_OPEN_5, TILE_OPEN_6, TILE_OPEN_7, TILE_OPEN_8};
+    private static final BufferedImage[] OPEN_TILES = {TILE_OPEN, TILE_OPEN_1, TILE_OPEN_2, TILE_OPEN_3, TILE_OPEN_4, TILE_OPEN_5, TILE_OPEN_6, TILE_OPEN_7, TILE_OPEN_8};
 
     public static final BufferedImage loadImage(String path) {
         BufferedImage image = null;
@@ -46,7 +46,7 @@ public class TileImages {
                 if (tile.containsBomb()) {
                     return TILE_BOMB;
                 }
-                return openTiles[tile.getNumberOfSurroundingMines()];
+                return OPEN_TILES[tile.getNumberOfSurroundingMines()];
         }
         return null;
     }
