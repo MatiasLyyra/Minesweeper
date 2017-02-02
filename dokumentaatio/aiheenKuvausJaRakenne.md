@@ -23,6 +23,6 @@ Pelaaja voi:
 - tallentaa voitettuun peliin käytetyn ajan nimimerkin kanssa
 - katsoa parhaat ajat
 
-**Määrittelyvaiheen luokkakaavio**
+**Projektin luokkakaavio**
 
 ![luokkakaavio](luokkakaavio.png)
