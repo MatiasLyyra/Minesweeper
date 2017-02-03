@@ -60,7 +60,9 @@ public class MinefieldMouseListener implements MouseListener, MouseMotionListene
     }
 
     private void handleHighlight(Vector2D<Integer> screenCoords) {
-        minefieldPanel.setHighlightedTile(screenCoords);
-        minefieldPanel.repaint();
+        if (!minesweeperGame.isGameEnded()) {
+            minefieldPanel.setHighlightedTile(screenCoords);
+            minefieldPanel.repaint();
+        }
     }
 }

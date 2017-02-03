@@ -51,10 +51,7 @@ public class Minefield {
     }
 
     private void cascadeOpen(Tile start) {
-        boolean checkedTiles[][] = new boolean[fieldHeight][fieldWidth];
-        checkedTiles[start.getY()][start.getX()] = true;
         markTileOpen(start);
-
         Queue<Tile> tilesToCheck = new ArrayDeque<>();
         tilesToCheck.add(start);
         while (!tilesToCheck.isEmpty()) {
@@ -63,8 +60,7 @@ public class Minefield {
                 continue;
             }
             for (Tile adjacent : getAdjacentTiles(tile.getX(), tile.getY())) {
-                if (!checkedTiles[adjacent.getY()][adjacent.getX()]) {
-                    checkedTiles[adjacent.getY()][adjacent.getX()] = true;
+                if (adjacent.getStatus() != Tile.TileStatus.OPEN) {
                     tilesToCheck.add(adjacent);
                     markTileOpen(adjacent);
                 }
@@ -73,6 +69,7 @@ public class Minefield {
     }
 
     private void markTileOpen(Tile tile) {
+        assert (tile.getStatus() != Tile.TileStatus.OPEN);
         tilesRemaining--;
         tile.open();
     }
