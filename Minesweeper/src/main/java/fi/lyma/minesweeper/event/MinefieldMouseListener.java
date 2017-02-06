@@ -1,6 +1,7 @@
 package fi.lyma.minesweeper.event;
 
 import fi.lyma.minesweeper.gui.MinefieldPanel;
+import fi.lyma.minesweeper.gui.StatusPanel;
 import fi.lyma.minesweeper.logic.MinesweeperGame;
 import fi.lyma.util.Vector2D;
 
@@ -20,7 +21,6 @@ public class MinefieldMouseListener implements MouseListener, MouseMotionListene
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-
     }
 
     @Override
