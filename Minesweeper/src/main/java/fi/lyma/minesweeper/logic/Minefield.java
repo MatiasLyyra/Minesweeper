@@ -3,6 +3,7 @@ package fi.lyma.minesweeper.logic;
 import fi.lyma.util.Vector2D;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Minefield {
 
@@ -12,25 +13,20 @@ public class Minefield {
     private final int totalNumberOfMines;
     private boolean minesPlaced;
     private int tilesRemaining;
+    private int tilesFlagged;
     private Random random;
 
-    public Minefield(int fieldWidth, int fieldHeight, int totalNumberOfMines, Random random) {
-        if (fieldWidth <= 0 || fieldHeight <= 0) {
-            throw new IllegalArgumentException("fieldWidth and fieldHeight must be greater than 0");
-        }
-        //Number of mines cannot exceed the total number of cells. Also any adjacent cell to starting position can't be mine
-        if (totalNumberOfMines >= (fieldWidth * fieldHeight - 8) || totalNumberOfMines <= 0) {
-            throw new IllegalArgumentException("totalNumberOfMines must be less than 'fieldWidth*fieldHeight-8' and greater than 0");
-        }
-        this.fieldWidth = fieldWidth;
-        this.fieldHeight = fieldHeight;
-        this.totalNumberOfMines = totalNumberOfMines;
+    public Minefield(GameMode gameMode, Random random) {
+        this.tilesFlagged = 0;
+        this.fieldWidth = gameMode.getFieldWidth();
+        this.fieldHeight = gameMode.getFieldHeight();
+        this.totalNumberOfMines = gameMode.getTotalNumberOfMines();
         this.minesPlaced = false;
         this.random = random;
-        this.tilesRemaining = fieldWidth * fieldHeight - totalNumberOfMines;
-        this.tiles = new Tile[fieldHeight][fieldWidth];
-        for (int x = 0; x < fieldWidth; ++x) {
-            for (int y = 0; y < fieldHeight; ++y) {
+        this.tilesRemaining = gameMode.getFieldWidth() * gameMode.getFieldHeight() - gameMode.getTotalNumberOfMines();
+        this.tiles = new Tile[gameMode.getFieldHeight()][gameMode.getFieldWidth()];
+        for (int x = 0; x < gameMode.getFieldWidth(); ++x) {
+            for (int y = 0; y < gameMode.getFieldHeight(); ++y) {
                 tiles[y][x] = new Tile(x, y);
             }
         }
@@ -73,7 +69,6 @@ public class Minefield {
         tilesRemaining--;
         tile.open();
     }
-
 
     private void checkMinesArePlaced() {
         if (!minesPlaced) {
@@ -167,6 +162,10 @@ public class Minefield {
 
     public int getFieldHeight() {
         return fieldHeight;
+    }
+
+    public int getNumberOfTilesFlagged() {
+        return (int) Arrays.stream(tiles).flatMap(Stream::of).filter(x -> {return x.getStatus() == Tile.TileStatus.FLAG;}).count();
     }
 
     public int getTotalNumberOfMines() {

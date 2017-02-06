@@ -7,6 +7,6 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new MainWindow(new MinesweeperGame(18, 16, 40)));
+        SwingUtilities.invokeLater(new MainWindow(MinesweeperGame.DEFAULT_GAME_MODE));
     }
 }

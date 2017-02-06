@@ -12,7 +12,7 @@ public class StatusPanel extends JPanel {
     public JLabel timeSpentLabel;
     private JButton resetButton;
 
-    public StatusPanel() {
+    public StatusPanel(MainWindow mainWindow) {
         Border border = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
         this.setLayout(new BorderLayout());
         this.setBackground(Color.LIGHT_GRAY);
@@ -24,6 +24,8 @@ public class StatusPanel extends JPanel {
         resetButton = new JButton("Reset");
         resetButton.setFocusPainted(false);
         resetButton.setContentAreaFilled(false);
+        resetButton.setName("resetButton");
+        resetButton.addActionListener(listener -> mainWindow.startNewGame());
         JPanel buttonWrapper = new JPanel();
         buttonWrapper.setOpaque(false);
         buttonWrapper.add(resetButton);
@@ -53,7 +55,7 @@ public class StatusPanel extends JPanel {
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(this.getRootPane().getWidth(), 40);
+        return new Dimension(288, 40);
     }
 
     public void setMinesLeft(int numberOfMinesLeft) {

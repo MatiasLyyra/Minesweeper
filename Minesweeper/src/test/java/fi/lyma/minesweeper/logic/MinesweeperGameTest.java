@@ -1,7 +1,5 @@
 package fi.lyma.minesweeper.logic;
 
-import fi.lyma.minesweeper.logic.ImmutableTile;
-import fi.lyma.minesweeper.logic.MinesweeperGame;
 import fi.lyma.util.Vector2D;
 
 import static org.junit.Assert.*;
@@ -14,7 +12,7 @@ public class MinesweeperGameTest {
 
     @Before
     public void setup() {
-        game = new MinesweeperGame(10, 10, 35);
+        game = new MinesweeperGame(new GameMode(10, 10, 35));
     }
 
     @Test

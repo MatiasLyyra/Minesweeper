@@ -13,18 +13,33 @@ public class MinesweeperGame {
         ENDED_LOSS
     }
 
+    public static final GameMode DEFAULT_GAME_MODE = new GameMode(16,16, 70);
     private Minefield minefield;
     private GameStatus gameStatus;
     private long startingTime;
     private long endingTime;
 
-    public MinesweeperGame(int fieldWidth, int fieldHeight, int numberOfMines) {
-        createNewField(fieldWidth, fieldHeight, numberOfMines);
+    public MinesweeperGame(GameMode gameMode) {
+        createNewField(gameMode);
     }
 
-    public final void createNewField(int fieldWidth, int fieldHeight, int numberOfMines) {
+    public final void createNewField(GameMode gameMode) {
+        GameMode mode = isGameModeValid(gameMode) ? gameMode : DEFAULT_GAME_MODE;
         gameStatus = GameStatus.NOT_STARTED;
-        minefield = new Minefield(fieldWidth, fieldHeight, numberOfMines, new Random());
+        minefield = new Minefield(mode, new Random());
+    }
+
+    private boolean isGameModeValid(GameMode gameMode) {
+        if (gameMode.getFieldWidth() <= 0 || gameMode.getFieldHeight() <= 0) {
+            return false;
+            //throw new IllegalArgumentException("fieldWidth and fieldHeight must be greater than 0");
+        }
+        //Number of mines cannot exceed the total number of cells. Also any adjacent cell to starting position can't be mine
+        if (gameMode.getTotalNumberOfMines() >= (gameMode.getFieldWidth() * gameMode.getFieldHeight() - 8) || gameMode.getTotalNumberOfMines() <= 0) {
+            return false;
+            //throw new IllegalArgumentException("totalNumberOfMines must be less than 'fieldWidth*fieldHeight-8' and greater than 0");
+        }
+        return true;
     }
 
     private void startGame(Vector2D<Integer> location) {
@@ -103,5 +118,9 @@ public class MinesweeperGame {
 
     public int getFieldHeight() {
         return minefield.getFieldHeight();
+    }
+
+    public int getNumberOfMinesRemaining() {
+        return minefield.getTotalNumberOfMines() - minefield.getNumberOfTilesFlagged();
     }
 }

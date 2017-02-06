@@ -2,9 +2,6 @@ package fi.lyma.minesweeper.logic;
 
 import static org.junit.Assert.*;
 
-import fi.lyma.minesweeper.logic.ImmutableTile;
-import fi.lyma.minesweeper.logic.Minefield;
-import fi.lyma.minesweeper.logic.Tile;
 import fi.lyma.testutil.RandomMock;
 import fi.lyma.util.Vector2D;
 import org.junit.Before;
@@ -17,14 +14,14 @@ public class MinefieldTest {
 
     @Before
     public void setup() {
-        minefield = new Minefield(10, 10, 50, new Random());
+        minefield = new Minefield(new GameMode(10, 10, 50), new Random());
     }
 
 
     @Test
     public void firstOpenedTileIsNotMine() {
         RandomMock mock = new RandomMock(0, 0, 2, 2, 0, 1, 0, 2, 0, 3, 3, 1, 0, 4, 1, 4, 2, 4, 3, 4, 4, 4, 4, 3, 4, 2, 4, 1, 4, 0, 3, 0, 2, 0, 1, 2, 1, 0);
-        minefield = new Minefield(5, 5, 16, mock);
+        minefield = new Minefield(new GameMode(5, 5, 16), mock);
         minefield.placeMines(new Vector2D(2, 2));
         assertFalse(minefield.getTile(new Vector2D(2, 2)).containsBomb());
         assertFalse(minefield.getTile(new Vector2D(3, 1)).containsBomb());
@@ -35,7 +32,7 @@ public class MinefieldTest {
     @Test
     public void correctNumberOfMines() {
         RandomMock mock = new RandomMock(2, 1, 3, 1, 4, 1, 4, 2, 4, 3, 3, 3, 2, 3, 2, 2, 0, 0, 1, 2, 2, 4, 5, 4, 5, 1, 5, 4);
-        minefield = new Minefield(6, 6, 5, mock);
+        minefield = new Minefield(new GameMode(6, 6, 5), mock);
         minefield.placeMines(new Vector2D(2, 2));
         int mines = 0;
         for (int x = 0; x < 5; ++x) {
@@ -49,7 +46,7 @@ public class MinefieldTest {
     @Test
     public void openTileReturnsCorrectValue() {
         RandomMock mock = new RandomMock(0, 0, 4, 3);
-        minefield = new Minefield(5, 5, 2, mock);
+        minefield = new Minefield(new GameMode(5, 5, 2), mock);
         minefield.placeMines(new Vector2D(2, 2));
         boolean mineOnTile1 = minefield.openTile(new Vector2D(2, 2));
         boolean mineOnTile2 = minefield.openTile(new Vector2D(0, 0));
@@ -62,7 +59,7 @@ public class MinefieldTest {
     @Test
     public void openTileOpensTile() {
         RandomMock mock = new RandomMock(3, 0, 4, 0, 5, 0, 5, 1, 5, 2, 4, 2, 3, 2, 3, 1);
-        minefield = new Minefield(6, 3, 8, mock);
+        minefield = new Minefield(new GameMode(6, 3, 8), mock);
         minefield.placeMines(new Vector2D(0, 1));
         minefield.openTile(new Vector2D(0, 1));
         ImmutableTile emptyTile = minefield.getTile(new Vector2D(0, 1));
@@ -98,7 +95,7 @@ public class MinefieldTest {
             i += 4;
         }
         RandomMock mock = new RandomMock(mines);
-        minefield = new Minefield(7, 7, 24, mock);
+        minefield = new Minefield(new GameMode(7, 7, 24), mock);
         minefield.placeMines(new Vector2D(3, 3));
         minefield.openTile(new Vector2D(3, 3));
         checkTiles();
@@ -107,7 +104,7 @@ public class MinefieldTest {
     @Test
     public void cascadeOpenWorks2() {
         RandomMock mock = new RandomMock(2, 2, 2, 3, 2, 4, 2, 5, 6, 0, 6, 1, 6, 2, 6, 3);
-        minefield = new Minefield(9, 6, 8, mock);
+        minefield = new Minefield(new GameMode(9, 6, 8), mock);
         minefield.placeMines(new Vector2D(0, 5));
         minefield.openTile(new Vector2D(0, 5));
         checkTiles();
@@ -116,7 +113,7 @@ public class MinefieldTest {
     @Test
     public void openedTilesCountIsCorrect() {
         RandomMock mock = new RandomMock(3, 0, 3, 1, 3, 2);
-        minefield = new Minefield(7, 3, 3, mock);
+        minefield = new Minefield(new GameMode(7, 3, 3), mock);
         minefield.placeMines(new Vector2D(1, 1));
         minefield.openTile(new Vector2D(1, 1));
         assertFalse(minefield.allEmptyTilesAreOpen());
@@ -127,7 +124,7 @@ public class MinefieldTest {
     @Test
     public void minesAreCountedCorrectly() {
         RandomMock mock = new RandomMock(0, 0, 1, 0, 2, 0, 0, 1, 2, 1, 0, 2, 1, 2, 2, 2, 6, 2, 7, 0);
-        minefield = new Minefield(8, 3, 10, mock);
+        minefield = new Minefield(new GameMode(8, 3, 10), mock);
         minefield.placeMines(new Vector2D(4, 2));
         assertEquals(8, minefield.getTile(new Vector2D(1, 1)).getNumberOfSurroundingMines());
         assertEquals(3, minefield.getTile(new Vector2D(3, 1)).getNumberOfSurroundingMines());
@@ -175,27 +172,27 @@ public class MinefieldTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void constructorIllegalArgumentZeroWidth() {
-        minefield = new Minefield(0, 10, 8, new Random());
+        minefield = new Minefield(new GameMode(0, 10, 8), new Random());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructorIllegalArgumentZeroHeight() {
-        minefield = new Minefield(10, 0, 8, new Random());
+        minefield = new Minefield(new GameMode(10, 0, 8), new Random());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructorIllegalArgumentNegativeNumberOfMines() {
-        minefield = new Minefield(10, 0, -1, new Random());
+        minefield = new Minefield(new GameMode(10, 0, -1), new Random());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructorIllegalArgumentEqualNumberOfTilesAndMines() {
-        minefield = new Minefield(10, 10, 100, new Random());
+        minefield = new Minefield(new GameMode(10, 10, 100), new Random());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void constructorIllegalArgumentZeroMines() {
-        minefield = new Minefield(10, 10, 0, new Random());
+        minefield = new Minefield(new GameMode(10, 10, 0), new Random());
     }
 
     @Test(expected = IllegalStateException.class)

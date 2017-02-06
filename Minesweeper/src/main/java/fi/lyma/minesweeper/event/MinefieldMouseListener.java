@@ -13,10 +13,12 @@ import java.awt.event.MouseMotionListener;
 public class MinefieldMouseListener implements MouseListener, MouseMotionListener {
     private final MinefieldPanel minefieldPanel;
     private final MinesweeperGame minesweeperGame;
+    private final StatusPanel statusPanel;
 
-    public MinefieldMouseListener(MinefieldPanel minefieldPanel, MinesweeperGame minesweeperGame) {
+    public MinefieldMouseListener(MinefieldPanel minefieldPanel, MinesweeperGame minesweeperGame, StatusPanel statusPanel) {
         this.minefieldPanel = minefieldPanel;
         this.minesweeperGame = minesweeperGame;
+        this.statusPanel = statusPanel;
     }
 
     @Override
@@ -36,6 +38,7 @@ public class MinefieldMouseListener implements MouseListener, MouseMotionListene
         } else if (SwingUtilities.isRightMouseButton(mouseEvent)) {
             minesweeperGame.flagTile(worldCoords);
         }
+        statusPanel.setMinesLeft(minesweeperGame.getNumberOfMinesRemaining());
         minefieldPanel.clearHighlightedTile();
         minefieldPanel.repaint();
     }
