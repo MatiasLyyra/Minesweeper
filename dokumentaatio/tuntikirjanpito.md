@@ -8,4 +8,4 @@ Päivä | Tunnit | Kuvaus
 26.01.2016 | 2h | Kattavammat yksikkötestit sekä MinesweeperGame luokan luonti
 26.01.2016 | 0.5h | Dokumentaation yms tekemistä
 03.02.2016 | 4h | GUI, testejä ja dokumentaatiota
-07.02.2016 | 3.5h | GUI, testejä ja dokumentaatiota
+07.02.2016 | 3.5h | Lisää GUI:n toiminnallisuutta ja muuta säätöä
