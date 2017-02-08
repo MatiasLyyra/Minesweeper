@@ -1,5 +1,9 @@
 package fi.lyma.util;
 
+/**
+ * Vector that holds x and y components of the type T
+ * @param <T> Type of the x and y components
+ */
 public class Vector2D<T> {
     private T x, y;
 

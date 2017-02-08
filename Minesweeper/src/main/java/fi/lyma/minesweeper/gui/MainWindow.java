@@ -41,7 +41,7 @@ public class MainWindow implements Runnable {
         frame.setTitle("Minesweeper");
         frame.pack();
         frame.setVisible(true);
-        timer = new Timer(250,  listener -> statusPanel.setTimeSpent(minesweeperGame.getTimeSpent()));
+        timer = new Timer(250, listener -> statusPanel.setTimeSpent(minesweeperGame.getTimeSpent()));
         timer.setRepeats(true);
         timer.start();
     }
@@ -63,12 +63,12 @@ public class MainWindow implements Runnable {
         JTextField fieldHeightField = new JTextField(Integer.toString(gameMode.getFieldHeight()));
         JTextField minesField = new JTextField(Integer.toString(gameMode.getTotalNumberOfMines()));
         final JComponent[] inputs = new JComponent[]{
-                new JLabel("Field width:"),
-                fieldWidthField,
-                new JLabel("Field height:"),
-                fieldHeightField,
-                new JLabel("Number of mines:"),
-                minesField
+            new JLabel("Field width:"),
+            fieldWidthField,
+            new JLabel("Field height:"),
+            fieldHeightField,
+            new JLabel("Number of mines:"),
+            minesField
         };
         int result = JOptionPane.showConfirmDialog(frame, inputs, "Game Settings", JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
@@ -84,7 +84,7 @@ public class MainWindow implements Runnable {
             mines = Integer.parseInt(minesString);
             startNewGame(new GameMode(width, height, mines));
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Error in game mode fields!");
+            JOptionPane.showMessageDialog(frame, "Invalid values in game mode fields!");
         }
     }
 }

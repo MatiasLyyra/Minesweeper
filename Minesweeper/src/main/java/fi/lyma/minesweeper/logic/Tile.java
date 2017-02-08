@@ -2,8 +2,14 @@ package fi.lyma.minesweeper.logic;
 
 import fi.lyma.util.Vector2D;
 
+/**
+ * Represents single tile within {@link Minefield}.
+ */
 public class Tile implements ImmutableTile {
 
+    /**
+     * Represents the state of a {@link Tile}
+     */
     public enum TileStatus {
         CLOSED,
         OPEN,

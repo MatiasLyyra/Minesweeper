@@ -2,6 +2,9 @@ package fi.lyma.testutil;
 
 import java.util.Random;
 
+/**
+ * Class used in unit test for {@link fi.lyma.minesweeper.logic.Minefield} for seeding predetermined locations for mines
+ */
 public class RandomMock extends Random {
     private int[] numbers;
     private int currentIndex;

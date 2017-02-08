@@ -21,7 +21,7 @@ public class StatusPanel extends JPanel {
         Border border = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
         this.setLayout(new BorderLayout());
         this.setBackground(Color.LIGHT_GRAY);
-        this.setBorder(new CompoundBorder(border, BorderFactory.createEmptyBorder(0,2,0,2)));
+        this.setBorder(new CompoundBorder(border, BorderFactory.createEmptyBorder(0, 2, 0, 2)));
 
         timeSpentLabel = new JLabel();
         minesLeftLabel = new JLabel();
@@ -71,6 +71,6 @@ public class StatusPanel extends JPanel {
     }
 
     public void setTimeSpent(long timeSpent) {
-        timeSpentLabel.setText(Long.toString(timeSpent/1000));
+        timeSpentLabel.setText(Long.toString(timeSpent / 1000));
     }
 }

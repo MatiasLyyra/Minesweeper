@@ -4,10 +4,15 @@ import fi.lyma.util.Vector2D;
 
 import java.util.Random;
 
+/**
+ * MinesweeperGame is the class responsible for holding the reference to the actual {@link Minefield} object
+ * and tracking the state of the game and time spent. All interactions with the field should happen through MinesweeperGame.
+ */
 public class MinesweeperGame {
 
-    private static final int ADJACENT_MINE_COUNT = 9;
-
+    /**
+     * Represents the state of a {@link MinesweeperGame} object
+     */
     public enum GameStatus {
         NOT_STARTED,
         STARTED,
@@ -15,16 +20,45 @@ public class MinesweeperGame {
         ENDED_LOSS
     }
 
-    public static final GameMode DEFAULT_GAME_MODE = new GameMode(16,16, 70);
+    /**
+     * Default game mode that is used when invalid game mode is provided
+     */
+    public static final GameMode DEFAULT_GAME_MODE = new GameMode(16, 16, 70);
+
+    /**
+     * {@link Minefield} height or width can't exceed this values
+     */
+    public static final int MAXIMUM_GAME_FIELD_SIDE_LENGTH = 150;
+
+    private static final int ADJACENT_MINE_COUNT = 9;
     private Minefield minefield;
     private GameStatus gameStatus;
     private long startingTime;
     private long endingTime;
 
+
+    /**
+     * Works exactly same as {@link MinesweeperGame#createNewField(GameMode)}
+     *
+     * @param gameMode GameMode for construction {@link Minefield}
+     *
+     * @see MinesweeperGame#createNewField(GameMode)
+     */
     public MinesweeperGame(GameMode gameMode) {
         createNewField(gameMode);
     }
 
+    /**
+     * Constructs {@link Minefield} with given {@link GameMode}. If the {@link GameMode} is invalid
+     * {@link MinesweeperGame#DEFAULT_GAME_MODE} is used instead.
+     * GameMode is invalid if
+     * <ul>
+     *     <li>width or height is less or equal to 0</li>
+     *     <li>width or height is greater than {@link MinesweeperGame#MAXIMUM_GAME_FIELD_SIDE_LENGTH}</li>
+     *     <li>number of mines is greater than width*height-9</li>
+     * </ul>
+     * @param gameMode GameMode for construction {@link Minefield}
+     */
     public final void createNewField(GameMode gameMode) {
         GameMode mode = isGameModeValid(gameMode) ? gameMode : DEFAULT_GAME_MODE;
         gameStatus = GameStatus.NOT_STARTED;
@@ -32,7 +66,8 @@ public class MinesweeperGame {
     }
 
     private boolean isGameModeValid(GameMode gameMode) {
-        if (gameMode.getFieldWidth() <= 0 || gameMode.getFieldHeight() <= 0) {
+        if (gameMode.getFieldWidth() <= 0 || gameMode.getFieldHeight() <= 0 ||
+                gameMode.getFieldWidth() > MAXIMUM_GAME_FIELD_SIDE_LENGTH || gameMode.getFieldWidth() > MAXIMUM_GAME_FIELD_SIDE_LENGTH) {
             return false;
 
         }

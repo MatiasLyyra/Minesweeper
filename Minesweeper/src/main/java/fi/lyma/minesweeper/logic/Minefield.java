@@ -5,6 +5,10 @@ import fi.lyma.util.Vector2D;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ * Representation of the minefield. Minefield class is responsible for initializing the field,
+ * opening/flagging tiles and getting information about the state of the field
+ */
 public class Minefield {
 
     private Tile[][] tiles;
@@ -14,6 +18,13 @@ public class Minefield {
     private int tilesFlagged;
     private Random random;
 
+    /**
+     * Constructs the Minefield to the settings provided by gameMode
+     * @param gameMode Provides settings to the field
+     * @param random Random object that is used to decide the locations of the mines.
+     *
+     * @see GameMode
+     */
     public Minefield(GameMode gameMode, Random random) {
         this.tilesFlagged = 0;
         this.gameMode = gameMode;
@@ -76,14 +87,14 @@ public class Minefield {
         return tiles[location.getY()][location.getX()];
     }
 
-    public void placeMines(Vector2D<Integer> location) {
+    public void placeMines(Vector2D<Integer> startingLocation) {
         if (minesPlaced) {
             return;
         }
         minesPlaced = true;
         int minesToPlace = gameMode.getTotalNumberOfMines();
-        List<Tile> adjacentToStart = getAdjacentTiles(location.getX(), location.getY());
-        Tile startingTile = tiles[location.getY()][location.getX()];
+        List<Tile> adjacentToStart = getAdjacentTiles(startingLocation.getX(), startingLocation.getY());
+        Tile startingTile = tiles[startingLocation.getY()][startingLocation.getX()];
         while (minesToPlace > 0) {
             int mineX = random.nextInt(gameMode.getFieldWidth());
             int mineY = random.nextInt(gameMode.getFieldHeight());
@@ -149,9 +160,10 @@ public class Minefield {
         return tilesRemaining == 0;
     }
 
-
     public int getNumberOfTilesFlagged() {
-        return (int) Arrays.stream(tiles).flatMap(Stream::of).filter(x -> {return x.getStatus() == Tile.TileStatus.FLAG;}).count();
+        return (int) Arrays.stream(tiles).flatMap(Stream::of).filter(x -> {
+            return x.getStatus() == Tile.TileStatus.FLAG;
+        }).count();
     }
 
     public GameMode getGameMode() {

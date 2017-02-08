@@ -1,11 +1,19 @@
 package fi.lyma.minesweeper.logic;
 
 /**
- * Created by Matias-PC on 6.2.2017.
+ * GameMode contains collection of values that are used to initialize {@link Minefield}
+ *
+ * @see Minefield
  */
 public class GameMode {
     private final int fieldWidth, fieldHeight, totalNumberOfMines;
 
+    /**
+     * Constructs GameMode with given parameters
+     * @param fieldWidth Width of the field
+     * @param fieldHeight Height of the field
+     * @param totalNumberOfMines Number of mines in the field
+     */
     public GameMode(int fieldWidth, int fieldHeight, int totalNumberOfMines) {
         this.fieldWidth = fieldWidth;
         this.fieldHeight = fieldHeight;
