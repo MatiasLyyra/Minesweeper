@@ -7,12 +7,14 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.function.Function;
+
 public class MinesweeperGameTest {
     private MinesweeperGame game;
 
     @Before
     public void setup() {
-        game = new MinesweeperGame(new GameMode(10, 10, 35));
+        game = new MinesweeperGame(MinesweeperGame.DEFAULT_GAME_MODE);
     }
 
     @Test
@@ -30,18 +32,110 @@ public class MinesweeperGameTest {
     public void gameEndsWhenMineIsClicked() {
         game.openTile(new Vector2D<>(5, 5));
         ImmutableTile mineTile = null;
-        for (int x = 0; x < game.getFieldWidth(); ++x) {
-            for (int y = 0; y < game.getFieldHeight(); ++y) {
-                ImmutableTile tile = game.getTile(new Vector2D<>(x, y));
-                if (tile.containsBomb()) {
-                    mineTile = tile;
-                    break;
-                }
-            }
-        }
-        game.openTile(new Vector2D<>(mineTile.getX(), mineTile.getY()));
+        mineTile = getTileWithProperty(immutableTile -> immutableTile.containsBomb());
+        game.openTile(mineTile.getLocation());
         assertEquals(MinesweeperGame.GameStatus.ENDED_LOSS, game.getGameStatus());
     }
 
+    private ImmutableTile getTileWithProperty(Function<ImmutableTile, Boolean> tileFinder) {
+        GameMode gameMode = game.getGameMode();
+        for (int x = 0; x < gameMode.getFieldWidth(); ++x) {
+            for (int y = 0; y < gameMode.getFieldHeight(); ++y) {
+                ImmutableTile tile = game.getTile(new Vector2D<>(x, y));
+                if (tileFinder.apply(tile)) {
+                    return tile;
+                }
+            }
+        }
+        return null;
+    }
 
+    @Test
+    public void invalidGameModeLoadsDefaultGameMode() {
+        game.createNewField(new GameMode(0,0,10));
+        assertEquals(MinesweeperGame.DEFAULT_GAME_MODE, game.getGameMode());
+        game.createNewField(new GameMode(5,5,17));
+        assertEquals(MinesweeperGame.DEFAULT_GAME_MODE, game.getGameMode());
+    }
+
+    @Test
+    public void openingMineRevealsAllTiles() {
+        game.openTile(new Vector2D<>(2,2));
+        ImmutableTile tile = getTileWithProperty(immutableTile -> immutableTile.containsBomb());
+        game.openTile(tile.getLocation());
+        checkTiles(Tile.TileStatus.OPEN);
+    }
+
+    private void checkTiles(Tile.TileStatus status) {
+        GameMode gameMode = game.getGameMode();
+        for (int x = 0; x < gameMode.getFieldWidth(); ++x) {
+            for (int y = 0; y < gameMode.getFieldHeight(); ++y) {
+                assertEquals(status, game.getTile(new Vector2D<>(x, y)).getStatus());
+            }
+        }
+    }
+
+    @Test
+    public void openingAllEmptyTilesCausesWin() {
+        game.openTile(new Vector2D<>(0,0));
+        openAllEmptyTiles();
+        assertEquals(MinesweeperGame.GameStatus.ENDED_WIN, game.getGameStatus());
+    }
+
+    private void openAllEmptyTiles() {
+        GameMode gameMode = game.getGameMode();
+        for (int x = 0; x < gameMode.getFieldWidth(); ++x) {
+            for (int y = 0; y < gameMode.getFieldHeight(); ++y) {
+                ImmutableTile tile = game.getTile(new Vector2D<>(x, y));
+                if (!tile.containsBomb()) {
+                    game.openTile(tile.getLocation());
+                }
+            }
+        }
+    }
+
+    @Test
+    public void flaggingTileWorks() {
+        ImmutableTile tile = game.getTile(new Vector2D<>(0,0));
+        game.flagTile(tile.getLocation());
+        assertEquals(Tile.TileStatus.FLAG, tile.getStatus());
+    }
+
+    @Test
+    public void createNewFieldCreatesNewField() {
+
+        GameMode gameMode = new GameMode(5, 5, 16);
+        game.createNewField(gameMode);
+        assertEquals(gameMode, game.getGameMode());
+    }
+
+    @Test
+    public void flaggingDoesNotChangeStateWhenGameIsOver() {
+        game.openTile(new Vector2D<>(0,0));
+        ImmutableTile tile = getTileWithProperty(immutableTile -> immutableTile.containsBomb());
+        game.openTile(tile.getLocation());
+        ImmutableTile openTile = getTileWithProperty(immutableTile -> immutableTile.getStatus() == Tile.TileStatus.OPEN);
+        game.flagTile(openTile.getLocation());
+        assertEquals(Tile.TileStatus.OPEN, openTile.getStatus());
+    }
+
+    @Test
+    public void getTimeSpentReturnsSomewhatCorrectResult() throws InterruptedException {
+        assertEquals(0, game.getTimeSpent());
+        game.openTile(new Vector2D<>(0,0));
+        Thread.sleep(500);
+        assertTrue(500 <= game.getTimeSpent());
+        Thread.sleep(500);
+        ImmutableTile tile = getTileWithProperty(immutableTile -> immutableTile.containsBomb());
+        game.openTile(tile.getLocation());
+        assertTrue(1000 <= game.getTimeSpent());
+    }
+
+    @Test
+    public void getTimeSpentStaysSameWhenWon() throws InterruptedException {
+        openAllEmptyTiles();
+        long timeNow = game.getTimeSpent();
+        Thread.sleep(1000);
+        assertEquals(timeNow, game.getTimeSpent());
+    }
 }

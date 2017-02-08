@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class TileImages {
+public class ImageResources {
     public static final BufferedImage TILE_CLOSED = loadImage("images/tile_closed.png");
     public static final BufferedImage TILE_OPEN = loadImage("images/tile_open.png");
     public static final BufferedImage TILE_OPEN_1 = loadImage("images/tile_open_1.png");
@@ -22,6 +22,10 @@ public class TileImages {
     public static final BufferedImage TILE_BOMB = loadImage("images/tile_bomb.png");
     public static final BufferedImage TILE_FLAG = loadImage("images/tile_flag.png");
     private static final BufferedImage[] OPEN_TILES = {TILE_OPEN, TILE_OPEN_1, TILE_OPEN_2, TILE_OPEN_3, TILE_OPEN_4, TILE_OPEN_5, TILE_OPEN_6, TILE_OPEN_7, TILE_OPEN_8};
+
+    public static final BufferedImage CLOCK_ICON = loadImage("images/clock_icon.png");
+    public static final BufferedImage BOMB_ICON = loadImage("images/bomb_icon.png");
+
 
     public static final BufferedImage loadImage(String path) {
         BufferedImage image = null;

@@ -8,9 +8,7 @@ import java.util.stream.Stream;
 public class Minefield {
 
     private Tile[][] tiles;
-    private final int fieldWidth;
-    private final int fieldHeight;
-    private final int totalNumberOfMines;
+    private final GameMode gameMode;
     private boolean minesPlaced;
     private int tilesRemaining;
     private int tilesFlagged;
@@ -18,9 +16,7 @@ public class Minefield {
 
     public Minefield(GameMode gameMode, Random random) {
         this.tilesFlagged = 0;
-        this.fieldWidth = gameMode.getFieldWidth();
-        this.fieldHeight = gameMode.getFieldHeight();
-        this.totalNumberOfMines = gameMode.getTotalNumberOfMines();
+        this.gameMode = gameMode;
         this.minesPlaced = false;
         this.random = random;
         this.tilesRemaining = gameMode.getFieldWidth() * gameMode.getFieldHeight() - gameMode.getTotalNumberOfMines();
@@ -55,7 +51,7 @@ public class Minefield {
             if (tile.getNumberOfSurroundingMines() > 0) {
                 continue;
             }
-            for (Tile adjacent : getAdjacentTiles(tile.getX(), tile.getY())) {
+            for (Tile adjacent : getAdjacentTiles(tile.getLocation().getX(), tile.getLocation().getY())) {
                 if (adjacent.getStatus() != Tile.TileStatus.OPEN) {
                     tilesToCheck.add(adjacent);
                     markTileOpen(adjacent);
@@ -85,12 +81,12 @@ public class Minefield {
             return;
         }
         minesPlaced = true;
-        int minesToPlace = totalNumberOfMines;
+        int minesToPlace = gameMode.getTotalNumberOfMines();
         List<Tile> adjacentToStart = getAdjacentTiles(location.getX(), location.getY());
         Tile startingTile = tiles[location.getY()][location.getX()];
         while (minesToPlace > 0) {
-            int mineX = random.nextInt(fieldWidth);
-            int mineY = random.nextInt(fieldHeight);
+            int mineX = random.nextInt(gameMode.getFieldWidth());
+            int mineY = random.nextInt(gameMode.getFieldHeight());
             Tile mineTile = tiles[mineY][mineX];
             if (!mineTile.containsBomb() && isValidPositionForBomb(startingTile, mineTile, adjacentToStart)) {
                 --minesToPlace;
@@ -113,8 +109,8 @@ public class Minefield {
     }
 
     private void calculateNumberOFSurroundingMines() {
-        for (int x = 0; x < fieldWidth; ++x) {
-            for (int y = 0; y < fieldHeight; ++y) {
+        for (int x = 0; x < gameMode.getFieldWidth(); ++x) {
+            for (int y = 0; y < gameMode.getFieldHeight(); ++y) {
                 int numberOfMines = 0;
                 for (Tile neighbour : getAdjacentTiles(x, y)) {
                     numberOfMines += neighbour.containsBomb() ? 1 : 0;
@@ -141,34 +137,24 @@ public class Minefield {
     }
 
     public boolean isInsideBounds(Vector2D<Integer> position) {
-        return position.getX() >= 0 && position.getX() < fieldWidth && position.getY() >= 0 && position.getY() < fieldHeight;
+        return position.getX() >= 0 && position.getX() < gameMode.getFieldWidth() && position.getY() >= 0 && position.getY() < gameMode.getFieldHeight();
     }
 
     public void revealAllTiles() {
-        for (int x = 0; x < fieldWidth; ++x) {
-            for (int y = 0; y < fieldHeight; ++y) {
-                tiles[y][x].open();
-            }
-        }
+        Arrays.stream(tiles).flatMap(Stream::of).forEach(tile -> tile.open());
+
     }
 
     public boolean allEmptyTilesAreOpen() {
         return tilesRemaining == 0;
     }
 
-    public int getFieldWidth() {
-        return fieldWidth;
-    }
-
-    public int getFieldHeight() {
-        return fieldHeight;
-    }
 
     public int getNumberOfTilesFlagged() {
         return (int) Arrays.stream(tiles).flatMap(Stream::of).filter(x -> {return x.getStatus() == Tile.TileStatus.FLAG;}).count();
     }
 
-    public int getTotalNumberOfMines() {
-        return totalNumberOfMines;
+    public GameMode getGameMode() {
+        return gameMode;
     }
 }

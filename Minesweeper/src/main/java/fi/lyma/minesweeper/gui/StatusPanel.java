@@ -8,18 +8,26 @@ import java.awt.*;
 
 public class StatusPanel extends JPanel {
 
+    private static final Dimension STATUS_LABEL_SIZE = new Dimension(50, 25);
+    private static final Dimension STATUS_PANEL_SIZE = new Dimension(256, 40);
+
     private JLabel minesLeftLabel;
     public JLabel timeSpentLabel;
+    private ImageIcon bombIcon;
+    private ImageIcon clockIcon;
     private JButton resetButton;
 
     public StatusPanel(MainWindow mainWindow) {
         Border border = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
         this.setLayout(new BorderLayout());
         this.setBackground(Color.LIGHT_GRAY);
-        this.setBorder(new CompoundBorder(border, BorderFactory.createEmptyBorder(0,5,0,5)));
+        this.setBorder(new CompoundBorder(border, BorderFactory.createEmptyBorder(0,2,0,2)));
 
         timeSpentLabel = new JLabel();
         minesLeftLabel = new JLabel();
+        clockIcon = new ImageIcon(ImageResources.CLOCK_ICON);
+        bombIcon = new ImageIcon(ImageResources.BOMB_ICON);
+
 
         resetButton = new JButton("Reset");
         resetButton.setFocusPainted(false);
@@ -31,31 +39,31 @@ public class StatusPanel extends JPanel {
         buttonWrapper.add(resetButton);
         this.add(buttonWrapper, BorderLayout.CENTER);
 
-        createStatusComponent(border, "Mines left:", minesLeftLabel, BorderLayout.WEST);
-        createStatusComponent(border, "Time spent: ", timeSpentLabel, BorderLayout.EAST);
+        createStatusComponent(border, bombIcon, minesLeftLabel, BorderLayout.WEST);
+        createStatusComponent(border, clockIcon, timeSpentLabel, BorderLayout.EAST);
     }
 
-    private void createStatusComponent(Border border, String labelText, JLabel statusLabel, String alignment) {
+    private void createStatusComponent(Border border, ImageIcon imageIcon, JLabel statusLabel, String alignment) {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
         panel.setOpaque(false);
         this.add(panel, alignment);
-        JLabel minesLeftLabel = new JLabel(labelText);
-        minesLeftLabel.setAlignmentY(Component.CENTER_ALIGNMENT);
+        JLabel stateIconLabel = new JLabel(imageIcon);
+        stateIconLabel.setAlignmentY(Component.CENTER_ALIGNMENT);
 
         statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
         statusLabel.setAlignmentY(Component.CENTER_ALIGNMENT);
-        statusLabel.setPreferredSize(new Dimension(25,25));
+        statusLabel.setPreferredSize(STATUS_LABEL_SIZE);
         statusLabel.setBorder(border);
         statusLabel.setText("0");
-        minesLeftLabel.setLabelFor(statusLabel);
-        panel.add(minesLeftLabel);
+        stateIconLabel.setLabelFor(statusLabel);
+        panel.add(stateIconLabel);
         panel.add(statusLabel);
     }
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(288, 40);
+        return STATUS_PANEL_SIZE;
     }
 
     public void setMinesLeft(int numberOfMinesLeft) {

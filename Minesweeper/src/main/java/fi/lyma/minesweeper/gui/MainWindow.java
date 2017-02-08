@@ -59,9 +59,9 @@ public class MainWindow implements Runnable {
     }
 
     public void showGameModeChooser() {
-        JTextField fieldWidthField = new JTextField();
-        JTextField fieldHeightField = new JTextField();
-        JTextField minesField = new JTextField();
+        JTextField fieldWidthField = new JTextField(Integer.toString(gameMode.getFieldWidth()));
+        JTextField fieldHeightField = new JTextField(Integer.toString(gameMode.getFieldHeight()));
+        JTextField minesField = new JTextField(Integer.toString(gameMode.getTotalNumberOfMines()));
         final JComponent[] inputs = new JComponent[]{
                 new JLabel("Field width:"),
                 fieldWidthField,

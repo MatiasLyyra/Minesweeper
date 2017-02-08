@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TopBar extends JMenuBar{
+    private static final Dimension TOP_BAR_SIZE = new Dimension(288, 30);
     private final MainWindow mainWindow;
 
     public TopBar(MainWindow mainWindow) {
@@ -22,6 +23,6 @@ public class TopBar extends JMenuBar{
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(288, 30);
+        return TOP_BAR_SIZE;
     }
 }
