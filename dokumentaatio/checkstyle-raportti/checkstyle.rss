@@ -25,7 +25,7 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2017</copyright>
     <item>
-      <title>File: 11,
+      <title>File: 14,
              Errors: 0,
              Warnings: 0,
              Infos: 0
@@ -44,20 +44,6 @@ under the License.
             </tr>
           </thead>
           <tbody>
-                          <tr>
-                <td>
-                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.logic.ImmutableTile.java">fi/lyma/minesweeper/logic/ImmutableTile.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
                           <tr>
                 <td>
                   <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.logic.MinesweeperGame.java">fi/lyma/minesweeper/logic/MinesweeperGame.java</a>
@@ -102,6 +88,90 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.gui.TopBar.java">fi/lyma/minesweeper/gui/TopBar.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#fi.lyma.testutil.RandomMock.java">fi/lyma/testutil/RandomMock.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.event.MinefieldMouseListener.java">fi/lyma/minesweeper/event/MinefieldMouseListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.gui.ImageResources.java">fi/lyma/minesweeper/gui/ImageResources.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.logic.GameMode.java">fi/lyma/minesweeper/logic/GameMode.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.logic.ImmutableTile.java">fi/lyma/minesweeper/logic/ImmutableTile.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.gui.MainWindow.java">fi/lyma/minesweeper/gui/MainWindow.java</a>
                 </td>
                 <td>
@@ -130,7 +200,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="${project.url}/checkstyle.html#fi.lyma.testutil.RandomMock.java">fi/lyma/testutil/RandomMock.java</a>
+                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.gui.StatusPanel.java">fi/lyma/minesweeper/gui/StatusPanel.java</a>
                 </td>
                 <td>
                   0
@@ -145,34 +215,6 @@ under the License.
                           <tr>
                 <td>
                   <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.logic.Minefield.java">fi/lyma/minesweeper/logic/Minefield.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.event.MinefieldMouseListener.java">fi/lyma/minesweeper/event/MinefieldMouseListener.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.gui.TileImages.java">fi/lyma/minesweeper/gui/TileImages.java</a>
                 </td>
                 <td>
                   0
