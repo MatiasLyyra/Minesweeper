@@ -21,20 +21,20 @@ public class MinefieldPanel extends JPanel {
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         Graphics2D graphics2D = (Graphics2D) graphics;
-        for (int x = 0; x < game.getFieldWidth(); ++x) {
-            for (int y = 0; y < game.getFieldHeight(); ++y) {
+        for (int x = 0; x < game.getGameMode().getFieldWidth(); ++x) {
+            for (int y = 0; y < game.getGameMode().getFieldHeight(); ++y) {
                 ImmutableTile tile = game.getTile(new Vector2D<>(x, y));
-                graphics2D.drawImage(TileImages.getImageWithTile(tile), x * tileSideLength, y * tileSideLength, null);
+                graphics2D.drawImage(ImageResources.getImageWithTile(tile), x * tileSideLength, y * tileSideLength, null);
             }
         }
         if (highlightedTile != null) {
-            graphics2D.drawImage(TileImages.TILE_OPEN, highlightedTile.getX() * tileSideLength, highlightedTile.getY() * tileSideLength, null);
+            graphics2D.drawImage(ImageResources.TILE_OPEN, highlightedTile.getX() * tileSideLength, highlightedTile.getY() * tileSideLength, null);
         }
     }
 
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(tileSideLength * game.getFieldWidth(), tileSideLength * game.getFieldHeight());
+        return new Dimension(tileSideLength * game.getGameMode().getFieldWidth(), tileSideLength * game.getGameMode().getFieldHeight());
     }
 
     public Vector2D<Integer> convertScreenToWorldCoordinates(Vector2D<Integer> screenCoords) {

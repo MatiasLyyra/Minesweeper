@@ -11,7 +11,7 @@ public class Tile implements ImmutableTile {
         QUESTION
     }
 
-    private final Vector2D<Integer> position;
+    private final Vector2D<Integer> location;
     private boolean containsBomb;
     private int surroundingMines;
     private TileStatus status;
@@ -19,7 +19,7 @@ public class Tile implements ImmutableTile {
     public Tile(int x, int y) {
         status = TileStatus.CLOSED;
         containsBomb = false;
-        position = new Vector2D<>(x, y);
+        location = new Vector2D<>(x, y);
     }
 
     @Override
@@ -60,11 +60,6 @@ public class Tile implements ImmutableTile {
     }
 
     @Override
-    public int getX() {
-        return position.getX();
-    }
-
-    @Override
     public int getNumberOfSurroundingMines() {
         return surroundingMines;
     }
@@ -74,8 +69,8 @@ public class Tile implements ImmutableTile {
     }
 
     @Override
-    public int getY() {
-        return position.getY();
+    public Vector2D<Integer> getLocation() {
+        return location;
     }
 
     @Override
@@ -95,7 +90,7 @@ public class Tile implements ImmutableTile {
         if (surroundingMines != tile.surroundingMines) {
             return false;
         }
-        if (!position.equals(tile.position)) {
+        if (!location.equals(tile.location)) {
             return false;
         }
         return status == tile.status;

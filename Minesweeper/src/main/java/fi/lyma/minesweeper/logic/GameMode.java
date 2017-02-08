@@ -12,6 +12,34 @@ public class GameMode {
         this.totalNumberOfMines = totalNumberOfMines;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        GameMode gameMode = (GameMode) o;
+
+        if (fieldWidth != gameMode.fieldWidth) {
+            return false;
+        }
+        if (fieldHeight != gameMode.fieldHeight) {
+            return false;
+        }
+        return totalNumberOfMines == gameMode.totalNumberOfMines;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = fieldWidth;
+        result = 31 * result + fieldHeight;
+        result = 31 * result + totalNumberOfMines;
+        return result;
+    }
+
     public int getTotalNumberOfMines() {
         return totalNumberOfMines;
     }

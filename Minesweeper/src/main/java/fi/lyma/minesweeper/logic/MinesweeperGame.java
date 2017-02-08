@@ -6,6 +6,8 @@ import java.util.Random;
 
 public class MinesweeperGame {
 
+    private static final int ADJACENT_MINE_COUNT = 9;
+
     public enum GameStatus {
         NOT_STARTED,
         STARTED,
@@ -32,12 +34,11 @@ public class MinesweeperGame {
     private boolean isGameModeValid(GameMode gameMode) {
         if (gameMode.getFieldWidth() <= 0 || gameMode.getFieldHeight() <= 0) {
             return false;
-            //throw new IllegalArgumentException("fieldWidth and fieldHeight must be greater than 0");
+
         }
         //Number of mines cannot exceed the total number of cells. Also any adjacent cell to starting position can't be mine
-        if (gameMode.getTotalNumberOfMines() >= (gameMode.getFieldWidth() * gameMode.getFieldHeight() - 8) || gameMode.getTotalNumberOfMines() <= 0) {
+        if (gameMode.getTotalNumberOfMines() > (gameMode.getFieldWidth() * gameMode.getFieldHeight() - ADJACENT_MINE_COUNT) || gameMode.getTotalNumberOfMines() <= 0) {
             return false;
-            //throw new IllegalArgumentException("totalNumberOfMines must be less than 'fieldWidth*fieldHeight-8' and greater than 0");
         }
         return true;
     }
@@ -78,16 +79,10 @@ public class MinesweeperGame {
     }
 
     public void flagTile(Vector2D<Integer> location) {
-        if (!minefield.isInsideBounds(location)) {
+        if (!minefield.isInsideBounds(location) || isGameEnded()) {
             return;
         }
-        if (!isGameEnded()) {
-            minefield.flagTile(location);
-        }
-    }
-
-    public boolean isGameStarted() {
-        return gameStatus == GameStatus.STARTED;
+        minefield.flagTile(location);
     }
 
     public boolean isGameEnded() {
@@ -112,15 +107,11 @@ public class MinesweeperGame {
         return gameStatus;
     }
 
-    public int getFieldWidth() {
-        return minefield.getFieldWidth();
-    }
-
-    public int getFieldHeight() {
-        return minefield.getFieldHeight();
+    public GameMode getGameMode() {
+        return minefield.getGameMode();
     }
 
     public int getNumberOfMinesRemaining() {
-        return minefield.getTotalNumberOfMines() - minefield.getNumberOfTilesFlagged();
+        return getGameMode().getTotalNumberOfMines() - minefield.getNumberOfTilesFlagged();
     }
 }

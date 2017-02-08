@@ -1,15 +1,15 @@
 package fi.lyma.minesweeper.logic;
 
+import fi.lyma.util.Vector2D;
+
 public interface ImmutableTile {
-    public Tile.TileStatus getStatus();
+    Tile.TileStatus getStatus();
 
-    public boolean containsBomb();
+    boolean containsBomb();
 
-    public int getNumberOfSurroundingMines();
+    int getNumberOfSurroundingMines();
 
-    public boolean canBeOpened();
+    boolean canBeOpened();
 
-    public int getX();
-
-    public int getY();
+    Vector2D<Integer> getLocation();
 }
