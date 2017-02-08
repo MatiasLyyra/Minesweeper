@@ -4,6 +4,8 @@ Interface ImmutableTile
 Class Minefield
 Class MinesweeperGame
 Class Tile
+Class GameMode
+Class Vector2D
 Enum TileStatus {
  CLOSED,
  OPEN,
@@ -19,6 +21,11 @@ Enum GameStatus {
 Tile ..|> ImmutableTile
 MinesweeperGame "1" -- "1" Minefield
 Minefield "1" *-- "*" Tile
+Minefield "1" -- "1" GameMode
 Tile "1" -- "1" TileStatus
+Tile "1" *-- "1" Vector2D
+MinesweeperGame ..> GameMode : <<use>>
+MinesweeperGame ..> ImmutableTile : <<use>>
+MinesweeperGame ..> Vector2D : <<use>>
 MinesweeperGame "1" -- "1" GameStatus
 @enduml
