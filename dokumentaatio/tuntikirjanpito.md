@@ -9,3 +9,5 @@ Päivä | Tunnit | Kuvaus
 26.01.2016 | 0.5h | Dokumentaation yms tekemistä
 03.02.2016 | 4h | GUI, testejä ja dokumentaatiota
 07.02.2016 | 3.5h | Lisää GUI:n toiminnallisuutta ja muuta säätöä
+09.02.2016 | 1.5h | Javadoc ja muu dokumentointi
+09.02.2016 | 2h | Koodin siistimistä ja testien tekemistä
