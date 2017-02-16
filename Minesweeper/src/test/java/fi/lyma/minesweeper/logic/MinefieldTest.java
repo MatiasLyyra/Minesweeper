@@ -7,6 +7,8 @@ import fi.lyma.util.Vector2D;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MinefieldTest {
@@ -169,6 +171,76 @@ public class MinefieldTest {
         assertEquals(Tile.TileStatus.OPEN, minefield.getTile(pos).getStatus());
     }
 
+    @Test
+    public void getAdjacentClosedNonFlaggedTilesWorks() {
+        RandomMock mock = new RandomMock(1,0,0,1,2,1,1,2,3,0,3,1,3,2);
+        minefield = new Minefield(new GameMode(7, 3, 7), mock);
+        minefield.placeMines(new Vector2D<>(5,1));
+        minefield.tryOpeningTile(new Vector2D<>(5,1));
+
+        minefield.tryFlaggingTile(new Vector2D<>(0,0));
+        minefield.tryFlaggingTile(new Vector2D<>(1,0));
+        minefield.tryFlaggingTile(new Vector2D<>(2,0));
+        minefield.tryFlaggingTile(new Vector2D<>(0,1));
+        minefield.tryFlaggingTile(new Vector2D<>(2,1));
+        minefield.tryFlaggingTile(new Vector2D<>(1,2));
+        minefield.tryFlaggingTile(new Vector2D<>(2,2));
+
+        List<ImmutableTile> tiles = minefield.getAdjacentClosedNonFlaggedTiles(new Vector2D<>(1,1));
+        Tile emptyTile = new Tile(0, 2);
+        emptyTile.setNumberOfSurroundingMines(2);
+        assertEquals(emptyTile, tiles.get(0));
+
+        minefield.tryFlaggingTile(new Vector2D<>(1, 2));
+        minefield.tryFlaggingTile(new Vector2D<>(1, 2));
+        minefield.tryFlaggingTile(new Vector2D<>(0, 2));
+
+        Tile bombTile = new Tile(1, 2);
+        bombTile.setNumberOfSurroundingMines(2);
+        bombTile.placeBomb();
+        tiles = minefield.getAdjacentClosedNonFlaggedTiles(new Vector2D<>(1,1));
+        assertEquals(bombTile, tiles.get(0));
+    }
+
+    @Test
+    public void flagsAreLimitedToTheNumberOfBombs() {
+        RandomMock mock = new RandomMock(3, 0, 3, 1, 3, 2);
+        minefield = new Minefield(new GameMode(7, 3, 3), mock);
+        minefield.tryFlaggingTile(new Vector2D<>(0,0));
+        minefield.tryFlaggingTile(new Vector2D<>(0,1));
+        minefield.tryFlaggingTile(new Vector2D<>(0,2));
+        assertEquals(3, minefield.getNumberOfTilesFlagged());
+        minefield.tryFlaggingTile(new Vector2D<>(1,0));
+        assertEquals(3, minefield.getNumberOfTilesFlagged());
+    }
+
+    @Test
+    public void numberOfFlaggedTilesWorks() {
+        minefield.placeMines(new Vector2D<>(0,0));
+        minefield.tryFlaggingTile(new Vector2D<>(0,1));
+        minefield.tryFlaggingTile(new Vector2D<>(2,2));
+        minefield.tryFlaggingTile(new Vector2D<>(3,4));
+        assertEquals(3, minefield.getNumberOfTilesFlagged());
+    }
+
+    @Test
+    public void quickOpenWorks() {
+        RandomMock mock = new RandomMock(1,0,2,0,0,1,1,2,2,2);
+        minefield = new Minefield(new GameMode(6,3, 5), mock);
+        minefield.placeMines(new Vector2D<>(4, 1));
+        minefield.tryOpeningTile(new Vector2D<>(4, 1));
+
+        minefield.tryFlaggingTile(new Vector2D<>(2, 0));
+        minefield.tryFlaggingTile(new Vector2D<>(2, 2));
+        minefield.quickOpen(new Vector2D<>(3,1));
+
+        minefield.tryFlaggingTile(new Vector2D<>(1, 0));
+        minefield.tryFlaggingTile(new Vector2D<>(1, 2));
+        minefield.tryFlaggingTile(new Vector2D<>(0, 1));
+        minefield.quickOpen(new Vector2D<>(2,1));
+        minefield.quickOpen(new Vector2D<>(1,1));
+        assertTrue(minefield.allEmptyTilesAreOpen());
+    }
     //Tests for invalid input
 /*
     @Test(expected = IllegalArgumentException.class)
@@ -199,6 +271,12 @@ public class MinefieldTest {
     @Test(expected = IllegalStateException.class)
     public void openTileIllegalState() {
         minefield.tryOpeningTile(new Vector2D<Integer>(0, 0));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void placeMinesIllegalState() {
+        minefield.placeMines(new Vector2D<>(0,0));
+        minefield.placeMines(new Vector2D<>(0,0));
     }
 
 }

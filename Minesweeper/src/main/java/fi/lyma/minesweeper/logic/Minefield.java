@@ -158,7 +158,9 @@ public class Minefield {
     }
 
     public List<ImmutableTile> getAdjacentClosedNonFlaggedTiles(Vector2D<Integer> location) {
-        return getAdjacentTiles(location).stream().filter(tile -> tile.getStatus() == Tile.TileStatus.CLOSED && tile.getStatus() != Tile.TileStatus.FLAG).collect(Collectors.toList());
+        return getAdjacentTiles(location)
+                .stream().filter(tile -> tile.getStatus() == Tile.TileStatus.CLOSED && tile.getStatus() != Tile.TileStatus.FLAG)
+                .collect(Collectors.toList());
     }
 
     public boolean isInsideBounds(Vector2D<Integer> position) {
@@ -184,6 +186,7 @@ public class Minefield {
         Tile selectedTile = tiles[location.getY()][location.getX()];
         List<Tile> adjacentTiles = getAdjacentTiles(location);
         int surroundingFlaggedTiles = (int) adjacentTiles.stream().filter(tile -> tile.getStatus() == Tile.TileStatus.FLAG).count();
+        //Adjacent tiles can be quick opened only when the number of flagged tile equals number of surrounding mines
         if (selectedTile.getStatus() != Tile.TileStatus.OPEN || surroundingFlaggedTiles != selectedTile.getNumberOfSurroundingMines()) {
             return false;
         }

@@ -36,7 +36,6 @@ public class MinefieldMouseListener implements MouseListener, MouseMotionListene
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
-
         Vector2D<Integer> worldCoords = minefieldPanel.convertScreenToWorldCoordinates(new Vector2D(mouseEvent.getX(), mouseEvent.getY()));
         if (SwingUtilities.isLeftMouseButton(mouseEvent) && SwingUtilities.isRightMouseButton(mouseEvent)) {
             minesweeperGame.openTile(worldCoords, true);
