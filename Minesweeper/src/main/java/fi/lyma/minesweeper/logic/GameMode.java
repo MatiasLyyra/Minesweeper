@@ -8,6 +8,8 @@ package fi.lyma.minesweeper.logic;
 public class GameMode {
     private final int fieldWidth, fieldHeight, totalNumberOfMines;
 
+
+
     /**
      * Constructs GameMode with given parameters
      * @param fieldWidth Width of the field

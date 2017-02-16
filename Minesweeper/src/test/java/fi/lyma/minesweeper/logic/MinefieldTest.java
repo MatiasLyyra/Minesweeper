@@ -48,9 +48,9 @@ public class MinefieldTest {
         RandomMock mock = new RandomMock(0, 0, 4, 3);
         minefield = new Minefield(new GameMode(5, 5, 2), mock);
         minefield.placeMines(new Vector2D(2, 2));
-        boolean mineOnTile1 = minefield.openTile(new Vector2D(2, 2));
-        boolean mineOnTile2 = minefield.openTile(new Vector2D(0, 0));
-        boolean mineOnTile3 = minefield.openTile(new Vector2D(4, 3));
+        boolean mineOnTile1 = minefield.tryOpeningTile(new Vector2D(2, 2));
+        boolean mineOnTile2 = minefield.tryOpeningTile(new Vector2D(0, 0));
+        boolean mineOnTile3 = minefield.tryOpeningTile(new Vector2D(4, 3));
         assertFalse(mineOnTile1);
         assertTrue(mineOnTile2);
         assertTrue(mineOnTile3);
@@ -61,15 +61,15 @@ public class MinefieldTest {
         RandomMock mock = new RandomMock(3, 0, 4, 0, 5, 0, 5, 1, 5, 2, 4, 2, 3, 2, 3, 1);
         minefield = new Minefield(new GameMode(6, 3, 8), mock);
         minefield.placeMines(new Vector2D(0, 1));
-        minefield.openTile(new Vector2D(0, 1));
+        minefield.tryOpeningTile(new Vector2D(0, 1));
         ImmutableTile emptyTile = minefield.getTile(new Vector2D(0, 1));
         assertEquals(Tile.TileStatus.OPEN, emptyTile.getStatus());
 
-        minefield.openTile(new Vector2D(4, 1));
+        minefield.tryOpeningTile(new Vector2D(4, 1));
         ImmutableTile emptyTile2 = minefield.getTile(new Vector2D(4, 1));
         assertEquals(Tile.TileStatus.OPEN, emptyTile2.getStatus());
 
-        minefield.openTile(new Vector2D(5, 2));
+        minefield.tryOpeningTile(new Vector2D(5, 2));
         ImmutableTile mineTile = minefield.getTile(new Vector2D(5, 2));
         assertEquals(Tile.TileStatus.OPEN, emptyTile2.getStatus());
 
@@ -97,7 +97,7 @@ public class MinefieldTest {
         RandomMock mock = new RandomMock(mines);
         minefield = new Minefield(new GameMode(7, 7, 24), mock);
         minefield.placeMines(new Vector2D(3, 3));
-        minefield.openTile(new Vector2D(3, 3));
+        minefield.tryOpeningTile(new Vector2D(3, 3));
         checkTiles();
     }
 
@@ -106,7 +106,7 @@ public class MinefieldTest {
         RandomMock mock = new RandomMock(2, 2, 2, 3, 2, 4, 2, 5, 6, 0, 6, 1, 6, 2, 6, 3);
         minefield = new Minefield(new GameMode(9, 6, 8), mock);
         minefield.placeMines(new Vector2D(0, 5));
-        minefield.openTile(new Vector2D(0, 5));
+        minefield.tryOpeningTile(new Vector2D(0, 5));
         checkTiles();
     }
 
@@ -115,9 +115,9 @@ public class MinefieldTest {
         RandomMock mock = new RandomMock(3, 0, 3, 1, 3, 2);
         minefield = new Minefield(new GameMode(7, 3, 3), mock);
         minefield.placeMines(new Vector2D(1, 1));
-        minefield.openTile(new Vector2D(1, 1));
+        minefield.tryOpeningTile(new Vector2D(1, 1));
         assertFalse(minefield.allEmptyTilesAreOpen());
-        minefield.openTile(new Vector2D(5, 1));
+        minefield.tryOpeningTile(new Vector2D(5, 1));
         assertTrue(minefield.allEmptyTilesAreOpen());
     }
 
@@ -152,11 +152,11 @@ public class MinefieldTest {
     public void flaggingTileWorks() {
         Vector2D<Integer> pos = new Vector2D<>(0, 0);
         minefield.placeMines(pos);
-        minefield.flagTile(pos);
+        minefield.tryFlaggingTile(pos);
         assertEquals(Tile.TileStatus.FLAG, minefield.getTile(pos).getStatus());
-        minefield.flagTile(pos);
+        minefield.tryFlaggingTile(pos);
         assertEquals(Tile.TileStatus.QUESTION, minefield.getTile(pos).getStatus());
-        minefield.flagTile(pos);
+        minefield.tryFlaggingTile(pos);
         assertEquals(Tile.TileStatus.CLOSED, minefield.getTile(pos).getStatus());
     }
 
@@ -164,8 +164,8 @@ public class MinefieldTest {
     public void cannotFlagOpenTile() {
         Vector2D<Integer> pos = new Vector2D<>(0, 0);
         minefield.placeMines(pos);
-        minefield.openTile(pos);
-        minefield.flagTile(pos);
+        minefield.tryOpeningTile(pos);
+        minefield.tryFlaggingTile(pos);
         assertEquals(Tile.TileStatus.OPEN, minefield.getTile(pos).getStatus());
     }
 
@@ -198,7 +198,7 @@ public class MinefieldTest {
 
     @Test(expected = IllegalStateException.class)
     public void openTileIllegalState() {
-        minefield.openTile(new Vector2D<Integer>(0, 0));
+        minefield.tryOpeningTile(new Vector2D<Integer>(0, 0));
     }
 
 }

@@ -7,13 +7,16 @@ import fi.lyma.util.Vector2D;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MinefieldPanel extends JPanel {
     private final MinesweeperGame game;
-    private Vector2D<Integer> highlightedTile;
+    private List<ImmutableTile> highlightedTiles;
     private final int tileSideLength = 32;
 
     public MinefieldPanel(MinesweeperGame game) {
+        highlightedTiles = new ArrayList<>();
         this.game = game;
     }
 
@@ -27,8 +30,8 @@ public class MinefieldPanel extends JPanel {
                 graphics2D.drawImage(ImageResources.getImageWithTile(tile), x * tileSideLength, y * tileSideLength, null);
             }
         }
-        if (highlightedTile != null) {
-            graphics2D.drawImage(ImageResources.TILE_OPEN, highlightedTile.getX() * tileSideLength, highlightedTile.getY() * tileSideLength, null);
+        for (ImmutableTile highligted : highlightedTiles) {
+            graphics2D.drawImage(ImageResources.TILE_OPEN, highligted.getLocation().getX() * tileSideLength, highligted.getLocation().getY() * tileSideLength, null);
         }
     }
 
@@ -42,16 +45,24 @@ public class MinefieldPanel extends JPanel {
     }
 
     public void clearHighlightedTile() {
-        highlightedTile = null;
+        highlightedTiles .clear();
     }
 
     public void setHighlightedTile(Vector2D<Integer> location) {
         location = convertScreenToWorldCoordinates(location);
         ImmutableTile tile = game.getTile(location);
-        if (tile == null || tile.getStatus() == Tile.TileStatus.OPEN) {
-            highlightedTile = null;
-        } else {
-            highlightedTile = location;
+        highlightedTiles.clear();
+        if (tile != null && tile.getStatus() != Tile.TileStatus.OPEN) {
+            highlightedTiles.add(tile);
         }
     }
+    public void highlightClosedAdjacentTiles(Vector2D<Integer> location) {
+        highlightedTiles.clear();
+        location = convertScreenToWorldCoordinates(location);
+        ImmutableTile tile = game.getTile(location);
+        if (tile != null && tile.getStatus() == Tile.TileStatus.OPEN) {
+            highlightedTiles.addAll(game.getAdjacentClosedNonFlaggedTiles(location));
+        }
+    }
+
 }

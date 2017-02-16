@@ -2,6 +2,7 @@ package fi.lyma.minesweeper.logic;
 
 import fi.lyma.util.Vector2D;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -92,14 +93,14 @@ public class MinesweeperGame {
         return tile;
     }
 
-    public void openTile(Vector2D<Integer> location) {
-        if (isGameEnded() || !minefield.isInsideBounds(location)) {
+    public void openTile(Vector2D<Integer> location, boolean quickOpen) {
+        if (isGameEnded()) {
             return;
         }
         if (GameStatus.NOT_STARTED == gameStatus) {
             startGame(location);
         }
-        boolean wasMine = minefield.openTile(location);
+        boolean wasMine = quickOpen ? minefield.quickOpen(location) : minefield.tryOpeningTile(location);
         checkForGameEnd(wasMine);
     }
 
@@ -117,7 +118,7 @@ public class MinesweeperGame {
         if (!minefield.isInsideBounds(location) || isGameEnded()) {
             return;
         }
-        minefield.flagTile(location);
+        minefield.tryFlaggingTile(location);
     }
 
     public boolean isGameEnded() {
@@ -148,5 +149,9 @@ public class MinesweeperGame {
 
     public int getNumberOfMinesRemaining() {
         return getGameMode().getTotalNumberOfMines() - minefield.getNumberOfTilesFlagged();
+    }
+
+    public List<ImmutableTile> getAdjacentClosedNonFlaggedTiles(Vector2D<Integer> location) {
+        return minefield.getAdjacentClosedNonFlaggedTiles(location);
     }
 }

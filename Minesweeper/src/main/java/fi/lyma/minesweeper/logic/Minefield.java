@@ -3,6 +3,7 @@ package fi.lyma.minesweeper.logic;
 import fi.lyma.util.Vector2D;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -20,9 +21,9 @@ public class Minefield {
 
     /**
      * Constructs the Minefield to the settings provided by gameMode
-     * @param gameMode Provides settings to the field
-     * @param random Random object that is used to decide the locations of the mines.
      *
+     * @param gameMode Provides settings to the field
+     * @param random   Random object that is used to decide the locations of the mines.
      * @see GameMode
      */
     public Minefield(GameMode gameMode, Random random) {
@@ -39,8 +40,21 @@ public class Minefield {
         }
     }
 
-    public boolean openTile(Vector2D<Integer> location) {
-        checkMinesArePlaced();
+    /**
+     * Reveals a tile in the minefield. Flagged tiles are ignored. Locations outside the bounds are ignored.
+     *
+     * @param location
+     * @return true if tile was a mine and not flagged (i.e. game should end), otherwise false.
+     * @throws IllegalStateException if {@link Minefield#placeMines(Vector2D)} has not been called first
+     */
+    public boolean tryOpeningTile(Vector2D<Integer> location) {
+        if (!minesPlaced) {
+            throw new IllegalStateException("Minefield#placeMines(Vector2D) has to be called first");
+        }
+        if(!isInsideBounds(location)) {
+            return false;
+        }
+
         Tile openedTile = tiles[location.getY()][location.getX()];
         boolean containsBomb = openedTile.containsBomb();
         if (openedTile.canBeOpened() && !containsBomb) {
@@ -49,8 +63,14 @@ public class Minefield {
         return containsBomb && openedTile.canBeOpened();
     }
 
-    public void flagTile(Vector2D<Integer> location) {
-        tiles[location.getY()][location.getX()].flag();
+    public void tryFlaggingTile(Vector2D<Integer> location) {
+        if (!isInsideBounds(location)) {
+            return;
+        }
+        Tile tile = tiles[location.getY()][location.getX()];
+        if (getNumberOfTilesFlagged() < gameMode.getTotalNumberOfMines() || tile.getStatus() != Tile.TileStatus.CLOSED) {
+            tiles[location.getY()][location.getX()].flag();
+        }
     }
 
     private void cascadeOpen(Tile start) {
@@ -62,7 +82,7 @@ public class Minefield {
             if (tile.getNumberOfSurroundingMines() > 0) {
                 continue;
             }
-            for (Tile adjacent : getAdjacentTiles(tile.getLocation().getX(), tile.getLocation().getY())) {
+            for (Tile adjacent : getAdjacentTiles(tile.getLocation())) {
                 if (adjacent.getStatus() != Tile.TileStatus.OPEN) {
                     tilesToCheck.add(adjacent);
                     markTileOpen(adjacent);
@@ -77,53 +97,43 @@ public class Minefield {
         tile.open();
     }
 
-    private void checkMinesArePlaced() {
-        if (!minesPlaced) {
-            throw new IllegalStateException("placeMines has to be called first");
-        }
-    }
-
     public ImmutableTile getTile(Vector2D<Integer> location) {
         return tiles[location.getY()][location.getX()];
     }
 
     public void placeMines(Vector2D<Integer> startingLocation) {
         if (minesPlaced) {
-            return;
+            throw new IllegalStateException("Minefield#placeMines(Vector2D) has already been called.");
         }
         minesPlaced = true;
         int minesToPlace = gameMode.getTotalNumberOfMines();
-        List<Tile> adjacentToStart = getAdjacentTiles(startingLocation.getX(), startingLocation.getY());
         Tile startingTile = tiles[startingLocation.getY()][startingLocation.getX()];
         while (minesToPlace > 0) {
             int mineX = random.nextInt(gameMode.getFieldWidth());
             int mineY = random.nextInt(gameMode.getFieldHeight());
             Tile mineTile = tiles[mineY][mineX];
-            if (!mineTile.containsBomb() && isValidPositionForBomb(startingTile, mineTile, adjacentToStart)) {
+            if (!mineTile.containsBomb() && isValidPositionForBomb(startingTile, mineTile)) {
                 --minesToPlace;
                 tiles[mineY][mineX].placeBomb();
             }
         }
-        calculateNumberOFSurroundingMines();
+        calculateNumberOfSurroundingMines();
     }
 
-    private boolean isValidPositionForBomb(Tile start, Tile other, List<Tile> adjacents) {
-        if (start.equals(other)) {
-            return false;
-        }
-        for (Tile adjacent : adjacents) {
+    private boolean isValidPositionForBomb(Tile start, Tile other) {
+        for (Tile adjacent : getAdjacentTiles(start.getLocation())) {
             if (other.equals(adjacent)) {
                 return false;
             }
         }
-        return true;
+        return !start.equals(other);
     }
 
-    private void calculateNumberOFSurroundingMines() {
+    private void calculateNumberOfSurroundingMines() {
         for (int x = 0; x < gameMode.getFieldWidth(); ++x) {
             for (int y = 0; y < gameMode.getFieldHeight(); ++y) {
                 int numberOfMines = 0;
-                for (Tile neighbour : getAdjacentTiles(x, y)) {
+                for (Tile neighbour : getAdjacentTiles(new Vector2D<Integer>(x, y))) {
                     numberOfMines += neighbour.containsBomb() ? 1 : 0;
                 }
                 tiles[y][x].setNumberOfSurroundingMines(numberOfMines);
@@ -131,20 +141,24 @@ public class Minefield {
         }
     }
 
-    private List<Tile> getAdjacentTiles(int x, int y) {
+    private List<Tile> getAdjacentTiles(Vector2D<Integer> location) {
         List<Tile> adjacentTiles = new ArrayList();
-        for (int i = -1; i <= 1; ++i) {
-            for (int j = -1; j <= 1; ++j) {
-                if (i == 0 && j == 0) {
+        for (int x = -1; x <= 1; ++x) {
+            for (int y = -1; y <= 1; ++y) {
+                if (x == 0 && y == 0) {
                     continue;
                 }
-                Vector2D<Integer> adjPos = new Vector2D(x + i, y + j);
-                if (isInsideBounds(adjPos)) {
-                    adjacentTiles.add(tiles[adjPos.getY()][adjPos.getX()]);
+                Vector2D<Integer> adjacentLocation = new Vector2D(location.getX() + x, location.getY() + y);
+                if (isInsideBounds(adjacentLocation)) {
+                    adjacentTiles.add(tiles[adjacentLocation.getY()][adjacentLocation.getX()]);
                 }
             }
         }
         return adjacentTiles;
+    }
+
+    public List<ImmutableTile> getAdjacentClosedNonFlaggedTiles(Vector2D<Integer> location) {
+        return getAdjacentTiles(location).stream().filter(tile -> tile.getStatus() == Tile.TileStatus.CLOSED && tile.getStatus() != Tile.TileStatus.FLAG).collect(Collectors.toList());
     }
 
     public boolean isInsideBounds(Vector2D<Integer> position) {
@@ -153,7 +167,6 @@ public class Minefield {
 
     public void revealAllTiles() {
         Arrays.stream(tiles).flatMap(Stream::of).forEach(tile -> tile.open());
-
     }
 
     public boolean allEmptyTilesAreOpen() {
@@ -161,9 +174,24 @@ public class Minefield {
     }
 
     public int getNumberOfTilesFlagged() {
-        return (int) Arrays.stream(tiles).flatMap(Stream::of).filter(x -> {
-            return x.getStatus() == Tile.TileStatus.FLAG;
-        }).count();
+        return (int) Arrays.stream(tiles).flatMap(Stream::of).filter(x -> x.getStatus() == Tile.TileStatus.FLAG).count();
+    }
+
+    public boolean quickOpen(Vector2D<Integer> location) {
+        if (!isInsideBounds(location)) {
+            return false;
+        }
+        Tile selectedTile = tiles[location.getY()][location.getX()];
+        List<Tile> adjacentTiles = getAdjacentTiles(location);
+        int surroundingFlaggedTiles = (int) adjacentTiles.stream().filter(tile -> tile.getStatus() == Tile.TileStatus.FLAG).count();
+        if (selectedTile.getStatus() != Tile.TileStatus.OPEN || surroundingFlaggedTiles != selectedTile.getNumberOfSurroundingMines()) {
+            return false;
+        }
+        boolean gameEnded = false;
+        for (Tile adjacent : adjacentTiles) {
+            gameEnded = gameEnded || tryOpeningTile(adjacent.getLocation());
+        }
+        return gameEnded;
     }
 
     public GameMode getGameMode() {

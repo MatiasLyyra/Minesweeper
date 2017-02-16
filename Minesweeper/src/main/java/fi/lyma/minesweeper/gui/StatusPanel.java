@@ -5,6 +5,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import java.awt.*;
+import java.util.concurrent.TimeUnit;
 
 public class StatusPanel extends JPanel {
 
@@ -71,6 +72,10 @@ public class StatusPanel extends JPanel {
     }
 
     public void setTimeSpent(long timeSpent) {
-        timeSpentLabel.setText(Long.toString(timeSpent / 1000));
+        timeSpentLabel.setText(String.format("%02d : %02d",
+                TimeUnit.MILLISECONDS.toMinutes(timeSpent),
+                TimeUnit.MILLISECONDS.toSeconds(timeSpent) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeSpent))
+        ));
     }
 }

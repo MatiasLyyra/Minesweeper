@@ -27,14 +27,21 @@ public class MinefieldMouseListener implements MouseListener, MouseMotionListene
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
-        handleHighlight(new Vector2D<>(mouseEvent.getX(), mouseEvent.getY()));
+        if (SwingUtilities.isLeftMouseButton(mouseEvent) && SwingUtilities.isRightMouseButton(mouseEvent)) {
+            highlightClosedAdjacentTiles(new Vector2D<>(mouseEvent.getX(), mouseEvent.getY()));
+        } else {
+            handleHighlight(new Vector2D<>(mouseEvent.getX(), mouseEvent.getY()));
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
+
         Vector2D<Integer> worldCoords = minefieldPanel.convertScreenToWorldCoordinates(new Vector2D(mouseEvent.getX(), mouseEvent.getY()));
-        if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
-            minesweeperGame.openTile(worldCoords);
+        if (SwingUtilities.isLeftMouseButton(mouseEvent) && SwingUtilities.isRightMouseButton(mouseEvent)) {
+            minesweeperGame.openTile(worldCoords, true);
+        } else if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
+            minesweeperGame.openTile(worldCoords, false);
         } else if (SwingUtilities.isRightMouseButton(mouseEvent)) {
             minesweeperGame.flagTile(worldCoords);
         }
@@ -55,7 +62,11 @@ public class MinefieldMouseListener implements MouseListener, MouseMotionListene
 
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
-        handleHighlight(new Vector2D<>(mouseEvent.getX(), mouseEvent.getY()));
+        if (SwingUtilities.isLeftMouseButton(mouseEvent) && SwingUtilities.isRightMouseButton(mouseEvent)) {
+            highlightClosedAdjacentTiles(new Vector2D<>(mouseEvent.getX(), mouseEvent.getY()));
+        } else {
+            handleHighlight(new Vector2D<>(mouseEvent.getX(), mouseEvent.getY()));
+        }
     }
 
     @Override
@@ -65,6 +76,13 @@ public class MinefieldMouseListener implements MouseListener, MouseMotionListene
     private void handleHighlight(Vector2D<Integer> screenCoords) {
         if (!minesweeperGame.isGameEnded()) {
             minefieldPanel.setHighlightedTile(screenCoords);
+            minefieldPanel.repaint();
+        }
+    }
+
+    private void highlightClosedAdjacentTiles(Vector2D<Integer> screenCoords) {
+        if (!minesweeperGame.isGameEnded()) {
+            minefieldPanel.highlightClosedAdjacentTiles(screenCoords);
             minefieldPanel.repaint();
         }
     }
