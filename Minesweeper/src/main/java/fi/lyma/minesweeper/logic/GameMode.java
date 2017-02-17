@@ -1,7 +1,7 @@
 package fi.lyma.minesweeper.logic;
 
 /**
- * GameMode contains collection of values that are used to store and initialize {@link Minefield}
+ * GameMode contains collection of values that are used to store and initialize {@link Minefield}.
  *
  * @see Minefield
  */

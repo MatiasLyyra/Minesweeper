@@ -7,7 +7,6 @@ import fi.lyma.util.Vector2D;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -232,13 +231,13 @@ public class MinefieldTest {
 
         minefield.tryFlaggingTile(new Vector2D<>(2, 0));
         minefield.tryFlaggingTile(new Vector2D<>(2, 2));
-        minefield.quickOpen(new Vector2D<>(3,1));
+        minefield.tryQuickOpening(new Vector2D<>(3,1));
 
         minefield.tryFlaggingTile(new Vector2D<>(1, 0));
         minefield.tryFlaggingTile(new Vector2D<>(1, 2));
         minefield.tryFlaggingTile(new Vector2D<>(0, 1));
-        minefield.quickOpen(new Vector2D<>(2,1));
-        minefield.quickOpen(new Vector2D<>(1,1));
+        minefield.tryQuickOpening(new Vector2D<>(2,1));
+        minefield.tryQuickOpening(new Vector2D<>(1,1));
         assertTrue(minefield.allEmptyTilesAreOpen());
     }
     //Tests for invalid input

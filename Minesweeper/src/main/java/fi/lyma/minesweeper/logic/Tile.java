@@ -8,7 +8,7 @@ import fi.lyma.util.Vector2D;
 public class Tile implements ImmutableTile {
 
     /**
-     * Represents the state of a {@link Tile}
+     * Represents the state of a {@link Tile}.
      */
     public enum TileStatus {
         CLOSED,
@@ -22,6 +22,11 @@ public class Tile implements ImmutableTile {
     private int surroundingMines;
     private TileStatus status;
 
+    /**
+     * Constructs tile with given location. Tile is by default closed and doesn't contain a bomb.
+     * @param x location of the bomb in x-axis
+     * @param y location of the bomb in y-axis
+     */
     public Tile(int x, int y) {
         status = TileStatus.CLOSED;
         containsBomb = false;
@@ -33,6 +38,9 @@ public class Tile implements ImmutableTile {
         return containsBomb;
     }
 
+    /**
+     * Places bomb in this tile.
+     */
     public void placeBomb() {
         containsBomb = true;
     }
@@ -42,6 +50,9 @@ public class Tile implements ImmutableTile {
         return status;
     }
 
+    /**
+     * Toggles the FLAG/QUESTION status in following rotation FLAG -> QUESTION -> CLOSED -> FLAG.
+     */
     public void flag() {
         switch (status) {
             case CLOSED:
@@ -61,6 +72,9 @@ public class Tile implements ImmutableTile {
         return status == TileStatus.CLOSED || status == TileStatus.QUESTION;
     }
 
+    /**
+     * Marks the tile as opened.
+     */
     public void open() {
         status = TileStatus.OPEN;
     }
@@ -70,6 +84,10 @@ public class Tile implements ImmutableTile {
         return surroundingMines;
     }
 
+    /**
+     * Sets the amount of surrounding mines.
+     * @param surroundingMines number of surrounding mines.
+     */
     public void setNumberOfSurroundingMines(int surroundingMines) {
         this.surroundingMines = surroundingMines;
     }

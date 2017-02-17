@@ -12,7 +12,7 @@ import java.util.Random;
 public class MinesweeperGame {
 
     /**
-     * Represents the state of a {@link MinesweeperGame} object
+     * Represents the state of a {@link MinesweeperGame} object.
      */
     public enum GameStatus {
         NOT_STARTED,
@@ -22,12 +22,12 @@ public class MinesweeperGame {
     }
 
     /**
-     * Default game mode that is used when invalid game mode is provided
+     * Default game mode that is used when invalid game mode is provided.
      */
     public static final GameMode DEFAULT_GAME_MODE = new GameMode(16, 16, 70);
 
     /**
-     * {@link Minefield} height or width can't exceed this values
+     * {@link Minefield} height or width can't exceed this values.
      */
     public static final int MAXIMUM_GAME_FIELD_SIDE_LENGTH = 150;
 
@@ -39,10 +39,8 @@ public class MinesweeperGame {
 
 
     /**
-     * Works exactly same as {@link MinesweeperGame#createNewField(GameMode)}
-     *
+     * Works exactly same as {@link MinesweeperGame#createNewField(GameMode)}.
      * @param gameMode GameMode for construction {@link Minefield}
-     *
      * @see MinesweeperGame#createNewField(GameMode)
      */
     public MinesweeperGame(GameMode gameMode) {
@@ -50,7 +48,7 @@ public class MinesweeperGame {
     }
 
     /**
-     * Constructs {@link Minefield} with given {@link GameMode}. If the {@link GameMode} is invalid
+     * Constructs {@link Minefield} with given {@link GameMode}. If the {@link GameMode} is invalid.
      * {@link MinesweeperGame#DEFAULT_GAME_MODE} is used instead.
      * GameMode is invalid if
      * <ul>
@@ -85,14 +83,22 @@ public class MinesweeperGame {
         minefield.placeMines(location);
     }
 
+    /**
+     * Returns {@link ImmutableTile} in the specified location.
+     * @param location of the tile
+     * @return ImmutableTile or null if the location was outside the bounds.
+     */
     public ImmutableTile getTile(Vector2D<Integer> location) {
-        ImmutableTile tile = null;
-        if (minefield.isInsideBounds(location)) {
-            tile = minefield.getTile(location);
-        }
-        return tile;
+        return minefield.getTile(location);
     }
 
+    /**
+     * Opens tile in the minefield in the specified location. Starts the game if it's not already started.
+     * @param location of the tile that is tried to be opened
+     * @param quickOpen false to use normal open and true to use quick open
+     * @see Minefield#tryOpeningTile(Vector2D)
+     * @see Minefield#tryQuickOpening(Vector2D)
+     */
     public void openTile(Vector2D<Integer> location, boolean quickOpen) {
         if (isGameEnded()) {
             return;
@@ -100,7 +106,7 @@ public class MinesweeperGame {
         if (GameStatus.NOT_STARTED == gameStatus) {
             startGame(location);
         }
-        boolean wasMine = quickOpen ? minefield.quickOpen(location) : minefield.tryOpeningTile(location);
+        boolean wasMine = quickOpen ? minefield.tryQuickOpening(location) : minefield.tryOpeningTile(location);
         checkForGameEnd(wasMine);
     }
 
@@ -114,17 +120,27 @@ public class MinesweeperGame {
         endingTime = System.currentTimeMillis();
     }
 
+    /**
+     * Flags tile in specified location.
+     * @param location of the tile that is tried to be flagged
+     * @see Minefield#tryFlaggingTile(Vector2D)
+     */
     public void flagTile(Vector2D<Integer> location) {
-        if (!minefield.isInsideBounds(location) || isGameEnded()) {
-            return;
-        }
         minefield.tryFlaggingTile(location);
     }
 
+    /**
+     * Returns whether game has ended.
+     * @return true if game status is ENDED_LOSS or ENDED_WIN, otherwise false.
+     */
     public boolean isGameEnded() {
         return gameStatus == GameStatus.ENDED_LOSS || gameStatus == GameStatus.ENDED_WIN;
     }
 
+    /**
+     * Return time spent since the start of the game.
+     * @return time in milliseconds since tha game started
+     */
     public long getTimeSpent() {
         long timeSpent = 0;
         switch (gameStatus) {
@@ -147,10 +163,19 @@ public class MinesweeperGame {
         return minefield.getGameMode();
     }
 
+    /**
+     * Return the number of potential non-flagged mines. Even if flag is placed in wrong location, it is counted.
+     * @return number of non-flagged mines
+     */
     public int getNumberOfMinesRemaining() {
         return getGameMode().getTotalNumberOfMines() - minefield.getNumberOfTilesFlagged();
     }
 
+    /**
+     * Returns list of the adjacent squares around specified location that are closed and not flagged.
+     * @param location that specifies the adjacent tiles.
+     * @return List of the adjacent tiles
+     */
     public List<ImmutableTile> getAdjacentClosedNonFlaggedTiles(Vector2D<Integer> location) {
         return minefield.getAdjacentClosedNonFlaggedTiles(location);
     }
