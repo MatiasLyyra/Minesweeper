@@ -26,3 +26,11 @@ Pelaaja voi:
 **Projektin luokkakaavio**
 
 ![luokkakaavio](luokkakaavio.png)
+
+**Sekvenssikaavio pelikentän muuttamisesta**
+
+![sekvenssi1](sekvenssi1.png)
+
+**Sekvenssikaavio ensimmäisen ruudun avaamisesta**
+
+![sekvenssi2](sekvenssi2.png)
