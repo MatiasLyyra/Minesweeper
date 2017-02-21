@@ -13,3 +13,4 @@ Päivä | Tunnit | Kuvaus
 09.02.2016 | 2h | Koodin siistimistä ja testien tekemistä
 17.02.2016 | 3.5h | GUI tweakkausta, unit testejä, quick open
 17.02.2016 | 2h | Dokumentointia
+22.02.2016 | 2.5h | High scoren lisääminen ja muuta säätöä
