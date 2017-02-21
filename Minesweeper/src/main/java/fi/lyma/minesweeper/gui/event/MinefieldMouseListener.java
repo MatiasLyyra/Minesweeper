@@ -1,4 +1,4 @@
-package fi.lyma.minesweeper.event;
+package fi.lyma.minesweeper.gui.event;
 
 import fi.lyma.minesweeper.gui.MinefieldPanel;
 import fi.lyma.minesweeper.gui.StatusPanel;
@@ -27,7 +27,7 @@ public class MinefieldMouseListener implements MouseListener, MouseMotionListene
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
-        if (SwingUtilities.isLeftMouseButton(mouseEvent) && SwingUtilities.isRightMouseButton(mouseEvent)) {
+        if (isBothOrMiddleButtonPressed(mouseEvent)) {
             highlightClosedAdjacentTiles(new Vector2D<>(mouseEvent.getX(), mouseEvent.getY()));
         } else {
             handleHighlight(new Vector2D<>(mouseEvent.getX(), mouseEvent.getY()));
@@ -37,7 +37,7 @@ public class MinefieldMouseListener implements MouseListener, MouseMotionListene
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
         Vector2D<Integer> worldCoords = minefieldPanel.convertScreenToWorldCoordinates(new Vector2D(mouseEvent.getX(), mouseEvent.getY()));
-        if (SwingUtilities.isLeftMouseButton(mouseEvent) && SwingUtilities.isRightMouseButton(mouseEvent)) {
+        if (isBothOrMiddleButtonPressed(mouseEvent)) {
             minesweeperGame.openTile(worldCoords, true);
         } else if (SwingUtilities.isLeftMouseButton(mouseEvent)) {
             minesweeperGame.openTile(worldCoords, false);
@@ -61,7 +61,7 @@ public class MinefieldMouseListener implements MouseListener, MouseMotionListene
 
     @Override
     public void mouseDragged(MouseEvent mouseEvent) {
-        if (SwingUtilities.isLeftMouseButton(mouseEvent) && SwingUtilities.isRightMouseButton(mouseEvent)) {
+        if (isBothOrMiddleButtonPressed(mouseEvent)) {
             highlightClosedAdjacentTiles(new Vector2D<>(mouseEvent.getX(), mouseEvent.getY()));
         } else {
             handleHighlight(new Vector2D<>(mouseEvent.getX(), mouseEvent.getY()));
@@ -84,5 +84,9 @@ public class MinefieldMouseListener implements MouseListener, MouseMotionListene
             minefieldPanel.highlightClosedAdjacentTiles(screenCoords);
             minefieldPanel.repaint();
         }
+    }
+
+    private boolean isBothOrMiddleButtonPressed(MouseEvent mouseEvent) {
+        return SwingUtilities.isLeftMouseButton(mouseEvent) && SwingUtilities.isRightMouseButton(mouseEvent) || SwingUtilities.isMiddleMouseButton(mouseEvent);
     }
 }

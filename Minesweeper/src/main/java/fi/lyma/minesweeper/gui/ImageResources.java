@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class ImageResources {
+
     public static final BufferedImage TILE_CLOSED = loadImage("images/tile_closed.png");
     public static final BufferedImage TILE_OPEN = loadImage("images/tile_open.png");
     public static final BufferedImage TILE_OPEN_1 = loadImage("images/tile_open_1.png");
@@ -26,14 +27,16 @@ public class ImageResources {
     public static final BufferedImage CLOCK_ICON = loadImage("images/clock_icon.png");
     public static final BufferedImage BOMB_ICON = loadImage("images/bomb_icon.png");
 
+    private ImageResources() {
+
+    }
 
     public static final BufferedImage loadImage(String path) {
-        BufferedImage image = null;
+        BufferedImage image;
         try {
             image = ImageIO.read(new File(path));
         } catch (IOException e) {
-            System.err.println(e);
-            System.err.println("Couldn't load image from path: " + path);
+            throw new RuntimeException("Cannot find image from path: " + path, e);
         }
         return image;
     }

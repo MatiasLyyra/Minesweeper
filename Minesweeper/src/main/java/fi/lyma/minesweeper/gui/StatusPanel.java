@@ -17,8 +17,10 @@ public class StatusPanel extends JPanel {
     private ImageIcon bombIcon;
     private ImageIcon clockIcon;
     private JButton resetButton;
+    private MainWindow mainWindow;
 
     public StatusPanel(MainWindow mainWindow) {
+        this.mainWindow = mainWindow;
         Border border = BorderFactory.createBevelBorder(BevelBorder.LOWERED);
         this.setLayout(new BorderLayout());
         this.setBackground(Color.LIGHT_GRAY);
@@ -72,10 +74,6 @@ public class StatusPanel extends JPanel {
     }
 
     public void setTimeSpent(long timeSpent) {
-        timeSpentLabel.setText(String.format("%02d : %02d",
-                TimeUnit.MILLISECONDS.toMinutes(timeSpent),
-                TimeUnit.MILLISECONDS.toSeconds(timeSpent) -
-                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeSpent))
-        ));
+        timeSpentLabel.setText(mainWindow.formatGameTime(timeSpent));
     }
 }

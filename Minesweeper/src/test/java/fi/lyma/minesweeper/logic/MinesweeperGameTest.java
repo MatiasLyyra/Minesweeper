@@ -14,7 +14,7 @@ public class MinesweeperGameTest {
 
     @Before
     public void setup() {
-        game = new MinesweeperGame(MinesweeperGame.DEFAULT_GAME_MODE);
+        game = new MinesweeperGame(GameMode.MEDIUM);
     }
 
     @Test
@@ -53,9 +53,9 @@ public class MinesweeperGameTest {
     @Test
     public void invalidGameModeLoadsDefaultGameMode() {
         game.createNewField(new GameMode(0,0,10));
-        assertEquals(MinesweeperGame.DEFAULT_GAME_MODE, game.getGameMode());
+        assertEquals(GameMode.MEDIUM, game.getGameMode());
         game.createNewField(new GameMode(5,5,17));
-        assertEquals(MinesweeperGame.DEFAULT_GAME_MODE, game.getGameMode());
+        assertEquals(GameMode.MEDIUM, game.getGameMode());
     }
 
     @Test

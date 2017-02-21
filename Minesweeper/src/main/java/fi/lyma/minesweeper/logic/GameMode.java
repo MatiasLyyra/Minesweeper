@@ -1,11 +1,19 @@
 package fi.lyma.minesweeper.logic;
 
+import java.io.Serializable;
+
 /**
  * GameMode contains collection of values that are used to store and initialize {@link Minefield}.
  *
  * @see Minefield
  */
-public class GameMode {
+public class GameMode implements Serializable{
+
+    public static final GameMode EASY = new GameMode(8,8, 15);
+    public static final GameMode MEDIUM = new GameMode(16,16, 70);
+    public static final GameMode HARD = new GameMode(18,18, 85);
+
+
     private final int fieldWidth, fieldHeight, totalNumberOfMines;
 
     /**
@@ -58,5 +66,19 @@ public class GameMode {
 
     public int getFieldWidth() {
         return fieldWidth;
+    }
+
+    @Override
+    public String toString() {
+        if (this.equals(EASY)) {
+            return "Easy";
+        }
+        if (this.equals(MEDIUM)) {
+            return "Medium";
+        }
+        if (this.equals(HARD)) {
+            return "Hard";
+        }
+        return String.format("Width: %s, Height: %s, Mines: %s", fieldWidth, fieldHeight, totalNumberOfMines);
     }
 }

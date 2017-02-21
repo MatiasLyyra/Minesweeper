@@ -1,7 +1,9 @@
 package fi.lyma.minesweeper.logic;
 
+import fi.lyma.minesweeper.logic.event.GameStateListener;
 import fi.lyma.util.Vector2D;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -22,11 +24,6 @@ public class MinesweeperGame {
     }
 
     /**
-     * Default game mode that is used when invalid game mode is provided.
-     */
-    public static final GameMode DEFAULT_GAME_MODE = new GameMode(16, 16, 70);
-
-    /**
      * {@link Minefield} height or width can't exceed this values.
      */
     public static final int MAXIMUM_GAME_FIELD_SIDE_LENGTH = 150;
@@ -36,7 +33,7 @@ public class MinesweeperGame {
     private GameStatus gameStatus;
     private long startingTime;
     private long endingTime;
-
+    private List<GameStateListener> listeners;
 
     /**
      * Works exactly same as {@link MinesweeperGame#createNewField(GameMode)}.
@@ -45,11 +42,12 @@ public class MinesweeperGame {
      */
     public MinesweeperGame(GameMode gameMode) {
         createNewField(gameMode);
+        listeners = new ArrayList<>();
     }
 
     /**
      * Constructs {@link Minefield} with given {@link GameMode}. If the {@link GameMode} is invalid.
-     * {@link MinesweeperGame#DEFAULT_GAME_MODE} is used instead.
+     * {@link GameMode#MEDIUM} is used instead.
      * GameMode is invalid if
      * <ul>
      *     <li>width or height is less or equal to 0</li>
@@ -59,16 +57,15 @@ public class MinesweeperGame {
      * @param gameMode GameMode for construction {@link Minefield}
      */
     public final void createNewField(GameMode gameMode) {
-        GameMode mode = isGameModeValid(gameMode) ? gameMode : DEFAULT_GAME_MODE;
+        GameMode mode = isGameModeValid(gameMode) ? gameMode : GameMode.MEDIUM;
         gameStatus = GameStatus.NOT_STARTED;
         minefield = new Minefield(mode, new Random());
     }
 
     private boolean isGameModeValid(GameMode gameMode) {
         if (gameMode.getFieldWidth() <= 0 || gameMode.getFieldHeight() <= 0 ||
-                gameMode.getFieldWidth() > MAXIMUM_GAME_FIELD_SIDE_LENGTH || gameMode.getFieldWidth() > MAXIMUM_GAME_FIELD_SIDE_LENGTH) {
+                gameMode.getFieldWidth() > MAXIMUM_GAME_FIELD_SIDE_LENGTH || gameMode.getFieldHeight() > MAXIMUM_GAME_FIELD_SIDE_LENGTH) {
             return false;
-
         }
         //Number of mines cannot exceed the total number of cells. Also any adjacent cell to starting position can't be mine
         if (gameMode.getTotalNumberOfMines() > (gameMode.getFieldWidth() * gameMode.getFieldHeight() - ADJACENT_MINE_COUNT) || gameMode.getTotalNumberOfMines() <= 0) {
@@ -81,6 +78,7 @@ public class MinesweeperGame {
         gameStatus = GameStatus.STARTED;
         startingTime = System.currentTimeMillis();
         minefield.placeMines(location);
+        notifyListeners();
     }
 
     /**
@@ -114,8 +112,10 @@ public class MinesweeperGame {
         if (wasMine) {
             minefield.revealAllTiles();
             gameStatus = GameStatus.ENDED_LOSS;
+            notifyListeners();
         } else if (minefield.allEmptyTilesAreOpen()) {
             gameStatus = GameStatus.ENDED_WIN;
+            notifyListeners();
         }
         endingTime = System.currentTimeMillis();
     }
@@ -151,6 +151,8 @@ public class MinesweeperGame {
             case STARTED:
                 timeSpent = System.currentTimeMillis() - startingTime;
                 break;
+            default:
+                break;
         }
         return timeSpent;
     }
@@ -178,5 +180,27 @@ public class MinesweeperGame {
      */
     public List<ImmutableTile> getAdjacentClosedNonFlaggedTiles(Vector2D<Integer> location) {
         return minefield.getAdjacentClosedNonFlaggedTiles(location);
+    }
+
+    private void notifyListeners() {
+        for (GameStateListener listener : listeners) {
+            listener.gameStatusChanged(gameStatus);
+        }
+    }
+
+    /**
+     * Adds listener to be notified for change on {@link GameStatus}.
+     * @param gameStateListener listener to add
+     */
+    public void addGameStateListener(GameStateListener gameStateListener) {
+        listeners.add(gameStateListener);
+    }
+
+    /**
+     * Removes listener
+     * @param gameStateListener listener to remove
+     */
+    public void removeGameStateListener(GameStateListener gameStateListener) {
+        listeners.remove(gameStateListener);
     }
 }
