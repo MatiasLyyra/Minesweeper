@@ -105,19 +105,27 @@ public class MinesweeperGame {
             startGame(location);
         }
         boolean wasMine = quickOpen ? minefield.tryQuickOpening(location) : minefield.tryOpeningTile(location);
-        checkForGameEnd(wasMine);
+        if (wasMine) {
+            endGameLose();
+        } else if (minefield.allEmptyTilesAreOpen()) {
+            endGameWin();
+        }
     }
 
-    private void checkForGameEnd(boolean wasMine) {
-        if (wasMine) {
-            minefield.revealAllTiles();
-            gameStatus = GameStatus.ENDED_LOSS;
-            notifyListeners();
-        } else if (minefield.allEmptyTilesAreOpen()) {
-            gameStatus = GameStatus.ENDED_WIN;
-            notifyListeners();
-        }
+    private void endGameWin() {
+        gameStatus = GameStatus.ENDED_WIN;
+        endGame();
+    }
+
+    private void endGameLose() {
+        minefield.revealAllTiles();
+        gameStatus = GameStatus.ENDED_LOSS;
+        endGame();
+    }
+
+    private void endGame() {
         endingTime = System.currentTimeMillis();
+        notifyListeners();
     }
 
     /**

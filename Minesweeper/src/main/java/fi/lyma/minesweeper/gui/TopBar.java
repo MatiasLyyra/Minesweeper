@@ -35,6 +35,7 @@ public class TopBar extends JMenuBar {
         JMenuItem highscores = new JMenuItem("High Scores");
         highscores.addActionListener(listener -> mainWindow.showHighScores());
         JMenuItem clearScore = new JMenuItem("Clear scores");
+        clearScore.addActionListener(listener -> mainWindow.clearScores());
         scores.add(highscores);
         scores.add(clearScore);
 
