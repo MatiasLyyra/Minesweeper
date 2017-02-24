@@ -25,8 +25,8 @@ under the License.
     <language>en-us</language>
     <copyright>&#169;2017</copyright>
     <item>
-      <title>File: 14,
-             Errors: 1,
+      <title>File: 17,
+             Errors: 2,
              Warnings: 0,
              Infos: 0
       </title>
@@ -46,7 +46,49 @@ under the License.
           <tbody>
                           <tr>
                 <td>
+                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.gui.event.MinefieldMouseListener.java">fi/lyma/minesweeper/gui/event/MinefieldMouseListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.score.ScoreRecord.java">fi/lyma/minesweeper/score/ScoreRecord.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.logic.MinesweeperGame.java">fi/lyma/minesweeper/logic/MinesweeperGame.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.logic.event.GameStateListener.java">fi/lyma/minesweeper/logic/event/GameStateListener.java</a>
                 </td>
                 <td>
                   0
@@ -103,20 +145,6 @@ under the License.
                           <tr>
                 <td>
                   <a href="${project.url}/checkstyle.html#fi.lyma.testutil.RandomMock.java">fi/lyma/testutil/RandomMock.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.event.MinefieldMouseListener.java">fi/lyma/minesweeper/event/MinefieldMouseListener.java</a>
                 </td>
                 <td>
                   0
@@ -200,6 +228,20 @@ under the License.
               </tr>
                           <tr>
                 <td>
+                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.logic.Minefield.java">fi/lyma/minesweeper/logic/Minefield.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  1
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.gui.StatusPanel.java">fi/lyma/minesweeper/gui/StatusPanel.java</a>
                 </td>
                 <td>
@@ -214,7 +256,7 @@ under the License.
               </tr>
                           <tr>
                 <td>
-                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.logic.Minefield.java">fi/lyma/minesweeper/logic/Minefield.java</a>
+                  <a href="${project.url}/checkstyle.html#fi.lyma.minesweeper.score.ScoreRecordKeeper.java">fi/lyma/minesweeper/score/ScoreRecordKeeper.java</a>
                 </td>
                 <td>
                   0
@@ -223,7 +265,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  1
+                  0
                 </td>
               </tr>
                           <tr>

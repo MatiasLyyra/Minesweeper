@@ -1,6 +1,7 @@
 @startuml
 left to right direction
 Interface ImmutableTile
+Interface GameStateListener
 Class Minefield
 Class MinesweeperGame
 Class Tile
@@ -28,4 +29,5 @@ MinesweeperGame ..> GameMode : <<use>>
 MinesweeperGame ..> ImmutableTile : <<use>>
 MinesweeperGame ..> Vector2D : <<use>>
 MinesweeperGame "1" -- "1" GameStatus
+MinesweeperGame "1" -- "*" GameStateListener
 @enduml
