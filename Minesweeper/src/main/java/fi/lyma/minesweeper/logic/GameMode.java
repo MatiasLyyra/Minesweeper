@@ -7,19 +7,20 @@ import java.io.Serializable;
  *
  * @see Minefield
  */
-public class GameMode implements Serializable{
+public class GameMode implements Serializable {
 
-    public static final GameMode EASY = new GameMode(8,8, 15);
-    public static final GameMode MEDIUM = new GameMode(16,16, 70);
-    public static final GameMode HARD = new GameMode(18,18, 85);
+    public static final GameMode EASY = new GameMode(8, 8, 15);
+    public static final GameMode MEDIUM = new GameMode(16, 16, 70);
+    public static final GameMode HARD = new GameMode(18, 18, 85);
 
 
     private final int fieldWidth, fieldHeight, totalNumberOfMines;
 
     /**
      * Constructs GameMode with given parameters.
-     * @param fieldWidth Width of the field
-     * @param fieldHeight Height of the field
+     *
+     * @param fieldWidth         Width of the field
+     * @param fieldHeight        Height of the field
      * @param totalNumberOfMines Number of mines in the field
      */
     public GameMode(int fieldWidth, int fieldHeight, int totalNumberOfMines) {

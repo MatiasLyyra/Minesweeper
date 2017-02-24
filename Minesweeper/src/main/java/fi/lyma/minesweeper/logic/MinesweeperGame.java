@@ -205,7 +205,7 @@ public class MinesweeperGame {
     }
 
     /**
-     * Removes listener
+     * Removes listener.
      * @param gameStateListener listener to remove
      */
     public void removeGameStateListener(GameStateListener gameStateListener) {

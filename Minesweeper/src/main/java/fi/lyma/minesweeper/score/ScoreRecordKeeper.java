@@ -3,13 +3,16 @@ package fi.lyma.minesweeper.score;
 import fi.lyma.minesweeper.logic.GameMode;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
- * Stores highs cores by the {@link GameMode}
+ * Stores highs cores by the {@link GameMode}.
  */
 public class ScoreRecordKeeper implements Serializable {
-
+    public static final String SAVE_DIR = ".minesweeper_save";
+    private static final String SAVE_FILE = "minesweeper.dat";
     Map<GameMode, List<ScoreRecord>> records;
 
     private ScoreRecordKeeper() {
@@ -17,8 +20,9 @@ public class ScoreRecordKeeper implements Serializable {
     }
 
     /**
-     * Stores new {@link ScoreRecord} with {@link GameMode}
-     * @param gameMode that was used
+     * Stores new {@link ScoreRecord} with {@link GameMode}.
+     *
+     * @param gameMode    that was used
      * @param scoreRecord player's information
      */
     public void storeNewRecord(GameMode gameMode, ScoreRecord scoreRecord) {
@@ -29,7 +33,8 @@ public class ScoreRecordKeeper implements Serializable {
     }
 
     /**
-     * Returns all the scores by {@link GameMode}
+     * Returns all the scores by {@link GameMode}.
+     *
      * @param gameMode {@link GameMode} to
      * @return list of {@link ScoreRecord}, if there are no SaveRecords with give {@link GameMode} empty list is returned
      */
@@ -38,23 +43,25 @@ public class ScoreRecordKeeper implements Serializable {
     }
 
     /**
-     * Clears all the scores
+     * Clears all the scores.
      */
     public void clearRecords() {
         records.clear();
+        saveToFile();
     }
 
     /**
-     * Factory method for the class that Loads {@link ScoreRecordKeeper} from given path. If file doesn't exist or the loading fails, new {@link ScoreRecordKeeper} is returned.
-     * @param path path to load from
+     * Factory method for the class that Loads {@link ScoreRecordKeeper} from file.
+     * If file doesn't exist or the loading fails, new {@link ScoreRecordKeeper} is returned.
+     *
      * @return ScoreRecordKeeper that is loaded from the file or new instance if loading fails
      */
-    public static ScoreRecordKeeper loadFromFile(String path) {
+    public static ScoreRecordKeeper loadFromFile() {
         ScoreRecordKeeper keeper;
         try (
-            FileInputStream stream = new FileInputStream(path);
+            FileInputStream stream = new FileInputStream(SAVE_DIR + File.separator + SAVE_FILE);
             ObjectInputStream objectStream = new ObjectInputStream(stream)
-        ){
+        ) {
             keeper = (ScoreRecordKeeper) objectStream.readObject();
         } catch (Exception e) {
             keeper = new ScoreRecordKeeper();
@@ -63,14 +70,15 @@ public class ScoreRecordKeeper implements Serializable {
     }
 
     /**
-     * Saves this instance to the given path
-     * @param path path to save to
+     * Saves this instance to file.
      */
-    public void saveToFile(String path) {
+    public void saveToFile() {
+        File saveFile = new File(SAVE_DIR);
+        saveFile.mkdir();
         try (
-            FileOutputStream outputStream = new FileOutputStream(path);
+            FileOutputStream outputStream = new FileOutputStream(SAVE_DIR + File.separator + SAVE_FILE);
             ObjectOutputStream objectStream = new ObjectOutputStream(outputStream)
-        ){
+        ) {
             objectStream.writeObject(this);
         } catch (Exception e) {
         }

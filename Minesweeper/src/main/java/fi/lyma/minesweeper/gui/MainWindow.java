@@ -10,6 +10,7 @@ import fi.lyma.minesweeper.score.ScoreRecordKeeper;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -19,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 public class MainWindow implements Runnable, GameStateListener {
 
     private static final String DEFAULT_NAME = "No Name";
-    private static final String SCORE_PATH = "scores.dat";
 
     private MinesweeperGame minesweeperGame;
     private JFrame frame;
@@ -28,7 +28,7 @@ public class MainWindow implements Runnable, GameStateListener {
     private ScoreRecordKeeper scoreRecordKeeper;
 
     public MainWindow(GameMode gameMode) {
-        scoreRecordKeeper = ScoreRecordKeeper.loadFromFile(SCORE_PATH);
+        scoreRecordKeeper = ScoreRecordKeeper.loadFromFile();
         this.gameMode = gameMode;
     }
 
@@ -40,7 +40,7 @@ public class MainWindow implements Runnable, GameStateListener {
         frame = new JFrame();
         statusPanel = new StatusPanel(this);
         statusPanel.setMinesLeft(minesweeperGame.getNumberOfMinesRemaining());
-
+        frame.setIconImage(ImageResources.BOMB_ICON);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
@@ -106,7 +106,7 @@ public class MainWindow implements Runnable, GameStateListener {
         if (gameStatus == MinesweeperGame.GameStatus.ENDED_WIN) {
             String name = showWinDialog();
             scoreRecordKeeper.storeNewRecord(gameMode, new ScoreRecord(name, minesweeperGame.getTimeSpent()));
-            scoreRecordKeeper.saveToFile(SCORE_PATH);
+            scoreRecordKeeper.saveToFile();
         }
     }
 
@@ -132,7 +132,6 @@ public class MainWindow implements Runnable, GameStateListener {
 
     public void clearScores() {
         scoreRecordKeeper.clearRecords();
-        scoreRecordKeeper.saveToFile(SCORE_PATH);
     }
 
     public String formatGameTime(long time) {

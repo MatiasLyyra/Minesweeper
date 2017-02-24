@@ -4,8 +4,8 @@ import fi.lyma.minesweeper.logic.ImmutableTile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Class responsible for holding reference to images and loading them.
@@ -36,8 +36,8 @@ public class ImageResources {
 
     public static final BufferedImage loadImage(String path) {
         BufferedImage image;
-        try {
-            image = ImageIO.read(new File(path));
+        try (InputStream is = ImageResources.class.getClassLoader().getResourceAsStream(path)) {
+            image = ImageIO.read(is);
         } catch (IOException e) {
             throw new RuntimeException("Cannot find image from path: " + path, e);
         }
