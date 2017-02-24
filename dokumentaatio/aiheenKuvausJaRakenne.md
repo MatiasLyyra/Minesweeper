@@ -23,7 +23,8 @@ Pelaaja voi:
 - tallentaa voitettuun peliin käytetyn ajan nimimerkin kanssa ✓
 - katsoa parhaat ajat ✓
 
-**Rakenteen kuvaus**
+**Rakenteen kuvaus:**
+
 Suurin osa pelin logiikasta sijaitsee Minefield-luokassa, joka on vastuussa ruutujen (Tile) tilan muuttamisesta, eli ruutujen avaamisesta, liputuksesta. Tile-luokka kuvaa yksittäistä pelin ruutua ja sisältää tiedon ruudun tilasta, jota kuvaa TileStatus, ja mahdollisesta pommista. Minefield-luokka antaa ulkopuolelle pääsyn ruutuihin ImmutableTile-rajapinnan kautta, jonka kautta ruudun tilan voi vain lukea. Vector2D on yleiskäyttöinen luokka, jota käytetään esim. ruudun sijainnin tallentamiseen.
 
 MinesweeperGame-luokan tarkoituksena on säilyttää Minefield-luokan ilmentymää sekä pitää kirjaa pelin tilanteesta (GameStatus) ja kulutetusta ajasta. 
