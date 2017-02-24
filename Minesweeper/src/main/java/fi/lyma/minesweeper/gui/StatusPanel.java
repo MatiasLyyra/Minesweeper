@@ -7,6 +7,9 @@ import javax.swing.border.CompoundBorder;
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Panel that shows information about minefield and holds reset button
+ */
 public class StatusPanel extends JPanel {
 
     private static final Dimension STATUS_LABEL_SIZE = new Dimension(50, 25);

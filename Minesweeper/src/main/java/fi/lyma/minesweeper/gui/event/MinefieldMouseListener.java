@@ -10,6 +10,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+/**
+ * Mouse listener that handles opening tiles etc when user clicks them.
+ */
 public class MinefieldMouseListener implements MouseListener, MouseMotionListener {
     private final MinefieldPanel minefieldPanel;
     private final MinesweeperGame minesweeperGame;

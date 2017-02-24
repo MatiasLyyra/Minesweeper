@@ -7,6 +7,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Class responsible for holding reference to images and loading them.
+ */
 public class ImageResources {
 
     public static final BufferedImage TILE_CLOSED = loadImage("images/tile_closed.png");

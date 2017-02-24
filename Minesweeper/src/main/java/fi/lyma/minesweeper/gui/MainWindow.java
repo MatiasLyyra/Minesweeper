@@ -13,6 +13,9 @@ import java.awt.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Class responsible for holding reference to the {@link MinesweeperGame} and starting the gui.
+ */
 public class MainWindow implements Runnable, GameStateListener {
 
     private static final String DEFAULT_NAME = "No Name";
