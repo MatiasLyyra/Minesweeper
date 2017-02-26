@@ -240,6 +240,34 @@ public class MinefieldTest {
         minefield.tryQuickOpening(new Vector2D<>(1,1));
         assertTrue(minefield.allEmptyTilesAreOpen());
     }
+
+    @Test
+    public void openingOutsideBoundsReturnsFalse() {
+        minefield.placeMines(new Vector2D<>(0,0));
+        assertFalse(minefield.tryOpeningTile(new Vector2D(-1, -1)));
+        assertFalse(minefield.tryOpeningTile(new Vector2D(minefield.getGameMode().getFieldWidth(), minefield.getGameMode().getFieldHeight())));
+        assertFalse(minefield.tryQuickOpening(new Vector2D(-1, -1)));
+        assertFalse(minefield.tryQuickOpening(new Vector2D(minefield.getGameMode().getFieldWidth(), minefield.getGameMode().getFieldHeight())));
+    }
+
+    @Test
+    public void flaggingOutsideDoesNotChangeMinefield() {
+        minefield.placeMines(new Vector2D<>(0,0));
+        minefield.tryFlaggingTile(new Vector2D<>(-1 , -1));
+        checkAllTilesAreClosed();
+        minefield.tryFlaggingTile(new Vector2D(minefield.getGameMode().getFieldWidth(), minefield.getGameMode().getFieldHeight()));
+        checkAllTilesAreClosed();
+    }
+
+    private void checkAllTilesAreClosed() {
+        GameMode gameMode = minefield.getGameMode();
+        for (int x = 0; x < gameMode.getFieldWidth(); ++x) {
+            for (int y = 0; y < gameMode.getFieldHeight(); ++y) {
+                assertEquals(Tile.TileStatus.CLOSED, minefield.getTile(new Vector2D<>(x, y)).getStatus());
+            }
+        }
+    }
+    
     //Tests for invalid input
 /*
     @Test(expected = IllegalArgumentException.class)

@@ -16,3 +16,4 @@ Päivä | Tunnit | Kuvaus
 22.02.2016 | 2.5h | High scoren lisääminen ja muuta säätöä
 22.02.2016 | 0.2h  | Muutaman bugin korjaus
 24.02.2016 | 1.5h  | Dokumentointia ja jar-pakkaukseen liittyvää säätöä
+26.02.2016 | 1h | Yksikkötestejä

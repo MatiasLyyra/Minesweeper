@@ -1,5 +1,6 @@
 package fi.lyma.minesweeper.logic;
 
+import fi.lyma.minesweeper.logic.event.GameStateListener;
 import fi.lyma.util.Vector2D;
 
 import static org.junit.Assert.*;
@@ -7,6 +8,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class MinesweeperGameTest {
@@ -137,5 +139,77 @@ public class MinesweeperGameTest {
         long timeNow = game.getTimeSpent();
         Thread.sleep(1000);
         assertEquals(timeNow, game.getTimeSpent());
+    }
+
+    @Test
+    public void notificationStartedWorks() {
+        final boolean[] notificationCalled = {false};
+        game.addGameStateListener(gameStatus -> {
+            if (gameStatus == MinesweeperGame.GameStatus.STARTED) {
+                notificationCalled[0] = true;
+            }
+        });
+        game.openTile(new Vector2D<>(0,0), false);
+        assertTrue(notificationCalled[0]);
+    }
+
+    @Test
+    public void notificationEndedLossWorks() {
+        final boolean[] notificationCalled = {false};
+        game.addGameStateListener(gameStatus -> {
+            if (gameStatus == MinesweeperGame.GameStatus.ENDED_LOSS) {
+                notificationCalled[0] = true;
+            }
+        });
+        game.openTile(new Vector2D<>(0,0), false);
+        ImmutableTile bombTile = getTileWithProperty(tile -> tile.containsBomb());
+        game.openTile(bombTile.getLocation(), false);
+        assertTrue(notificationCalled[0]);
+    }
+
+    @Test
+    public void notificationEndedWinWorks() {
+        final boolean[] notificationCalled = {false};
+        game.openTile(new Vector2D<>(0,0), false);
+        game.addGameStateListener(gameStatus -> {
+            if (gameStatus == MinesweeperGame.GameStatus.ENDED_WIN) {
+                notificationCalled[0] = true;
+            }
+        });
+        openAllEmptyTiles();
+        assertTrue(notificationCalled[0]);
+    }
+
+    @Test
+    public void removingNotificationsWorks() {
+        final boolean[] called = {false};
+        GameStateListener listener = new GameStateListener() {
+            @Override
+            public void gameStatusChanged(MinesweeperGame.GameStatus gameStatus) {
+                called[0] = true;
+            }
+        };
+        game.addGameStateListener(listener);
+        game.removeGameStateListener(listener);
+        game.openTile(new Vector2D<>(0,0), false);
+        ImmutableTile bombTile = getTileWithProperty(immutableTile -> immutableTile.containsBomb());
+        game.openTile(bombTile.getLocation(), false);
+        assertFalse(called[0]);
+    }
+
+    @Test
+    public void remainingMinesAreCountedCorrectly() {
+        GameMode mode = game.getGameMode();
+        assertEquals(mode.getTotalNumberOfMines(), game.getNumberOfMinesRemaining());
+        game.flagTile(new Vector2D<>(0,0));
+        assertEquals(mode.getTotalNumberOfMines() - 1, game.getNumberOfMinesRemaining());
+        game.flagTile(new Vector2D<>(0,0));
+        assertEquals(mode.getTotalNumberOfMines(), game.getNumberOfMinesRemaining());
+    }
+
+    @Test
+    public void adjacentClosedTilesIsNotNull() {
+        List<ImmutableTile> tiles = game.getAdjacentClosedNonFlaggedTiles(new Vector2D<>(0, 0));
+        assertFalse(null == tiles);
     }
 }

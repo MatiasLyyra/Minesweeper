@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Panel that shows information about minefield and holds reset button
+ * Panel that shows information about minefield and holds reset button.
  */
 public class StatusPanel extends JPanel {
 

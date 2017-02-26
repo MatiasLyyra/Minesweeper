@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Draws minefield and highlights the tiles
+ * Draws minefield and highlights the tiles.
  */
 public class MinefieldPanel extends JPanel {
     private final MinesweeperGame game;

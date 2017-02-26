@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Top bar that holds menu buttons
+ * Top bar that holds menu buttons.
  */
 public class TopBar extends JMenuBar {
     private static final Dimension TOP_BAR_SIZE = new Dimension(256, 30);
