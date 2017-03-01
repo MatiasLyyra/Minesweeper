@@ -17,3 +17,4 @@ Päivä | Tunnit | Kuvaus
 22.02.2016 | 0.2h  | Muutaman bugin korjaus
 24.02.2016 | 1.5h  | Dokumentointia ja jar-pakkaukseen liittyvää säätöä
 26.02.2016 | 1h | Yksikkötestejä
+01.03.2016 | 1h | Dokumentointia
