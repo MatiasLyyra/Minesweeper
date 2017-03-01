@@ -1,0 +1,22 @@
+-encoding
+'MS932'
+-protected
+-sourcepath
+'F:/Programs/Minesweeper/Minesweeper/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2017. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'F:/Programs/Minesweeper/Minesweeper/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Minesweeper 1.0 API'
+-linkoffline
+'http://docs.oracle.com/javase/8/docs/api' 'F:/Programs/Minesweeper/Minesweeper/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'Minesweeper 1.0 API'

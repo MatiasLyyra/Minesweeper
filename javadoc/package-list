@@ -1,0 +1,8 @@
+fi.lyma.minesweeper.gui
+fi.lyma.minesweeper.gui.event
+fi.lyma.minesweeper.logic
+fi.lyma.minesweeper.logic.event
+fi.lyma.minesweeper.main
+fi.lyma.minesweeper.score
+fi.lyma.testutil
+fi.lyma.util
