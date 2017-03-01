@@ -11,3 +11,5 @@ Perinteinen miinaharavapeli, joka on toteutettu Javalla. Lisää tietoa [miinaha
 [checkstyle-raportti](https://htmlpreview.github.io/?https://github.com/MatiasLyyra/Minesweeper/blob/master/dokumentaatio/checkstyle-raportti/checkstyle.html)
 
 [käyttöohjeet](dokumentaatio/käyttöohjeet.md)
+
+[javadoc](https://htmlpreview.github.io/?https://github.com/MatiasLyyra/Minesweeper/blob/master/javadoc/index.html)
