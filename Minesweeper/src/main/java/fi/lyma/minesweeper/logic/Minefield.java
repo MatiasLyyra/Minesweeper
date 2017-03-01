@@ -106,7 +106,7 @@ public class Minefield {
     }
 
     /**
-     * Returns {@link Tile} in specified location as {@link ImmutableTile}
+     * Returns {@link Tile} in specified location as {@link ImmutableTile}.
      *
      * @param location of the tile
      * @return Tile as {@link ImmutableTile} or null if called outside the bounds
