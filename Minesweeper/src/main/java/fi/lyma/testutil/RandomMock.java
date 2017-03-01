@@ -11,7 +11,8 @@ public class RandomMock extends Random {
 
     /**
      * Constructs {@link RandomMock} with given numbers that are used to give "random" numbers.
-     * @param numbers "random" numbers
+     *
+     * @param numbers Numbers that are returned from nextInt() and nextInt(int)
      */
     public RandomMock(int... numbers) {
         this.numbers = numbers;

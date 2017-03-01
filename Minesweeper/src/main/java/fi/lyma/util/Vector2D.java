@@ -2,6 +2,7 @@ package fi.lyma.util;
 
 /**
  * Vector that holds x and y components of the type T.
+ *
  * @param <T> Type of the x and y components
  */
 public class Vector2D<T> {
@@ -9,8 +10,9 @@ public class Vector2D<T> {
 
     /**
      * Constructs {@link Vector2D} with given x and y components.
-     * @param x location of the vector in x-axis
-     * @param y location of the vector in y-axis
+     *
+     * @param x Location of the vector in x-axis
+     * @param y Location of the vector in y-axis
      */
     public Vector2D(T x, T y) {
         this.x = x;

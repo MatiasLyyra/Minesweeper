@@ -10,9 +10,10 @@ public class ScoreRecord implements Serializable, Comparable<ScoreRecord> {
     public final long timeSpent;
 
     /**
-     * Construncts new ScoreRecord with give parameters.
-     * @param playerName name of the player
-     * @param timeSpent time spent on solving the minefield
+     * Constructs new ScoreRecord with give parameters.
+     *
+     * @param playerName Name of the player
+     * @param timeSpent  Time spent on solving the minefield
      */
     public ScoreRecord(String playerName, long timeSpent) {
         this.playerName = playerName;

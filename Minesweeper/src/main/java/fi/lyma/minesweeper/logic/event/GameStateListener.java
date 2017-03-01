@@ -8,7 +8,8 @@ import fi.lyma.minesweeper.logic.MinesweeperGame;
 public interface GameStateListener {
     /**
      * Called when game's status changes with new {@link fi.lyma.minesweeper.logic.MinesweeperGame.GameStatus} as argument.
-     * @param gameStatus new status
+     *
+     * @param gameStatus New changed status
      */
     void gameStatusChanged(MinesweeperGame.GameStatus gameStatus);
 }

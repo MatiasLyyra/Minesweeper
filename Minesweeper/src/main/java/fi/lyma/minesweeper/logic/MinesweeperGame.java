@@ -36,7 +36,8 @@ public class MinesweeperGame {
     private List<GameStateListener> listeners;
 
     /**
-     * Works exactly same as {@link MinesweeperGame#createNewField(GameMode)}.
+     * Constructs {@link Minefield}.
+     *
      * @param gameMode GameMode for construction {@link Minefield}
      * @see MinesweeperGame#createNewField(GameMode)
      */
@@ -50,10 +51,11 @@ public class MinesweeperGame {
      * {@link GameMode#MEDIUM} is used instead.
      * GameMode is invalid if
      * <ul>
-     *     <li>width or height is less or equal to 0</li>
-     *     <li>width or height is greater than {@link MinesweeperGame#MAXIMUM_GAME_FIELD_SIDE_LENGTH}</li>
-     *     <li>number of mines is greater than width*height-9</li>
+     * <li>width or height is less or equal to 0</li>
+     * <li>width or height is greater than {@link MinesweeperGame#MAXIMUM_GAME_FIELD_SIDE_LENGTH}</li>
+     * <li>number of mines is greater than width*height-9</li>
      * </ul>
+     *
      * @param gameMode GameMode for construction {@link Minefield}
      */
     public final void createNewField(GameMode gameMode) {
@@ -83,8 +85,9 @@ public class MinesweeperGame {
 
     /**
      * Returns {@link ImmutableTile} in the specified location.
-     * @param location of the tile
-     * @return ImmutableTile or null if the location was outside the bounds.
+     *
+     * @param location Location of the tile
+     * @return ImmutableTile or null if the location was outside the bounds
      */
     public ImmutableTile getTile(Vector2D<Integer> location) {
         return minefield.getTile(location);
@@ -92,8 +95,9 @@ public class MinesweeperGame {
 
     /**
      * Opens tile in the minefield in the specified location. Starts the game if it's not already started.
-     * @param location of the tile that is tried to be opened
-     * @param quickOpen false to use normal open and true to use quick open
+     *
+     * @param location  Location of the tile that is tried to be opened
+     * @param quickOpen False to use normal open and true to use quick open
      * @see Minefield#tryOpeningTile(Vector2D)
      * @see Minefield#tryQuickOpening(Vector2D)
      */
@@ -130,7 +134,8 @@ public class MinesweeperGame {
 
     /**
      * Flags tile in specified location.
-     * @param location of the tile that is tried to be flagged
+     *
+     * @param location Location of the tile that is tried to be flagged
      * @see Minefield#tryFlaggingTile(Vector2D)
      */
     public void flagTile(Vector2D<Integer> location) {
@@ -139,7 +144,8 @@ public class MinesweeperGame {
 
     /**
      * Returns whether game has ended.
-     * @return true if game status is ENDED_LOSS or ENDED_WIN, otherwise false.
+     *
+     * @return True if game status is ENDED_LOSS or ENDED_WIN, otherwise false.
      */
     public boolean isGameEnded() {
         return gameStatus == GameStatus.ENDED_LOSS || gameStatus == GameStatus.ENDED_WIN;
@@ -147,7 +153,8 @@ public class MinesweeperGame {
 
     /**
      * Return time spent since the start of the game.
-     * @return time in milliseconds since tha game started
+     *
+     * @return Time in milliseconds since tha game started
      */
     public long getTimeSpent() {
         long timeSpent = 0;
@@ -175,7 +182,8 @@ public class MinesweeperGame {
 
     /**
      * Return the number of potential non-flagged mines. Even if flag is placed in wrong location, it is counted.
-     * @return number of non-flagged mines
+     *
+     * @return Number of non-flagged mines
      */
     public int getNumberOfMinesRemaining() {
         return getGameMode().getTotalNumberOfMines() - minefield.getNumberOfTilesFlagged();
@@ -183,7 +191,8 @@ public class MinesweeperGame {
 
     /**
      * Returns list of the adjacent squares around specified location that are closed and not flagged.
-     * @param location that specifies the adjacent tiles.
+     *
+     * @param location Location that specifies the adjacent tiles
      * @return List of the adjacent tiles
      */
     public List<ImmutableTile> getAdjacentClosedNonFlaggedTiles(Vector2D<Integer> location) {
@@ -198,7 +207,8 @@ public class MinesweeperGame {
 
     /**
      * Adds listener to be notified for change on {@link GameStatus}.
-     * @param gameStateListener listener to add
+     *
+     * @param gameStateListener Listener to add
      */
     public void addGameStateListener(GameStateListener gameStateListener) {
         listeners.add(gameStateListener);
@@ -206,7 +216,8 @@ public class MinesweeperGame {
 
     /**
      * Removes listener.
-     * @param gameStateListener listener to remove
+     *
+     * @param gameStateListener Listener to remove
      */
     public void removeGameStateListener(GameStateListener gameStateListener) {
         listeners.remove(gameStateListener);

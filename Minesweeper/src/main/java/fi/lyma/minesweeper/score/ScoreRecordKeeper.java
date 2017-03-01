@@ -11,7 +11,7 @@ import java.util.*;
  * Stores highs cores by the {@link GameMode}.
  */
 public class ScoreRecordKeeper implements Serializable {
-    public static final String SAVE_DIR = ".minesweeper_save";
+    private static final String SAVE_DIR = ".minesweeper_save";
     private static final String SAVE_FILE = "minesweeper.dat";
     Map<GameMode, List<ScoreRecord>> records;
 
@@ -22,8 +22,8 @@ public class ScoreRecordKeeper implements Serializable {
     /**
      * Stores new {@link ScoreRecord} with {@link GameMode}.
      *
-     * @param gameMode    that was used
-     * @param scoreRecord player's information
+     * @param gameMode    {@link GameMode} that was used
+     * @param scoreRecord {@link ScoreRecord} that contains score of the player
      */
     public void storeNewRecord(GameMode gameMode, ScoreRecord scoreRecord) {
         List<ScoreRecord> scoreRecords = records.getOrDefault(gameMode, new ArrayList<>());
@@ -36,7 +36,7 @@ public class ScoreRecordKeeper implements Serializable {
      * Returns all the scores by {@link GameMode}.
      *
      * @param gameMode {@link GameMode} to
-     * @return list of {@link ScoreRecord}, if there are no SaveRecords with give {@link GameMode} empty list is returned
+     * @return List of {@link ScoreRecord}s, if there are no SaveRecords with given {@link GameMode} empty list is returned
      */
     public List<ScoreRecord> getScoresByGameMode(GameMode gameMode) {
         return records.getOrDefault(gameMode, new ArrayList<>());
@@ -59,8 +59,8 @@ public class ScoreRecordKeeper implements Serializable {
     public static ScoreRecordKeeper loadFromFile() {
         ScoreRecordKeeper keeper;
         try (
-            FileInputStream stream = new FileInputStream(SAVE_DIR + File.separator + SAVE_FILE);
-            ObjectInputStream objectStream = new ObjectInputStream(stream)
+                FileInputStream stream = new FileInputStream(SAVE_DIR + File.separator + SAVE_FILE);
+                ObjectInputStream objectStream = new ObjectInputStream(stream)
         ) {
             keeper = (ScoreRecordKeeper) objectStream.readObject();
         } catch (Exception e) {
@@ -76,8 +76,8 @@ public class ScoreRecordKeeper implements Serializable {
         File saveFile = new File(SAVE_DIR);
         saveFile.mkdir();
         try (
-            FileOutputStream outputStream = new FileOutputStream(SAVE_DIR + File.separator + SAVE_FILE);
-            ObjectOutputStream objectStream = new ObjectOutputStream(outputStream)
+                FileOutputStream outputStream = new FileOutputStream(SAVE_DIR + File.separator + SAVE_FILE);
+                ObjectOutputStream objectStream = new ObjectOutputStream(outputStream)
         ) {
             objectStream.writeObject(this);
         } catch (Exception e) {

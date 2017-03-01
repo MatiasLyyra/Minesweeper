@@ -44,8 +44,8 @@ public class Minefield {
      * Tries to reveal a tile in the minefield in specified location.
      * Flagged and open tiles are ignored. Locations outside the bounds are ignored.
      *
-     * @param location The location of the tile that is tried to be opened
-     * @return true if tile was a mine and not flagged (i.e. game should end), otherwise false
+     * @param location Location of the tile that is tried to be opened
+     * @return True if tile was a mine and not flagged (i.e. game should end), otherwise false
      * @throws IllegalStateException if {@link Minefield#placeMines(Vector2D)} has not been called first
      */
     public boolean tryOpeningTile(Vector2D<Integer> location) {
@@ -68,7 +68,8 @@ public class Minefield {
     /**
      * Tries to toggle flag/question tile in specified location. Tile can be only flagged if it's closed.
      * Toggle rotation follows FLAG -> QUESTION -> CLOSED -> FLAG. Number of flags cannot exceed the number of bombs in the minefield.
-     * @param location The location of the tile that is tried to be flagged.
+     *
+     * @param location Location of the tile that is tried to be flagged.
      */
     public void tryFlaggingTile(Vector2D<Integer> location) {
         if (!isInsideBounds(location)) {
@@ -105,9 +106,10 @@ public class Minefield {
     }
 
     /**
-     * Returns tile in specified location. {@link Tile} is returned as {@link ImmutableTile} to prevent changing the state of the outside tha class.
+     * Returns {@link Tile} in specified location as {@link ImmutableTile}
+     *
      * @param location of the tile
-     * @return tile as {@link ImmutableTile} or null if called outside the bounds.
+     * @return Tile as {@link ImmutableTile} or null if called outside the bounds
      */
     public ImmutableTile getTile(Vector2D<Integer> location) {
         if (!isInsideBounds(location)) {
@@ -118,7 +120,8 @@ public class Minefield {
 
     /**
      * Places the mines to the minefield so that there are no mines in startingLocation or it's adjacent squares.
-     * @param startingLocation specifies the starting location so that the mines aren't placed into that square or it's adjacent squares.
+     *
+     * @param startingLocation Starting location i.e. first opened tile
      */
     public void placeMines(Vector2D<Integer> startingLocation) {
         if (minesPlaced) {
@@ -178,7 +181,8 @@ public class Minefield {
 
     /**
      * Returns list of the adjacent squares around specified location that are closed and not flagged.
-     * @param location that specifies the adjacent tiles.
+     *
+     * @param location Location that specifies the adjacent tiles
      * @return List of the adjacent tiles
      */
     public List<ImmutableTile> getAdjacentClosedNonFlaggedTiles(Vector2D<Integer> location) {
@@ -200,7 +204,8 @@ public class Minefield {
 
     /**
      * Returns whether all the tiles in the minefield that don't contain a bomb are opened.
-     * @return true if all non-mine tiles are open, otherwise false.
+     *
+     * @return True if all non-mine tiles are open, otherwise false
      */
     public boolean allEmptyTilesAreOpen() {
         return tilesRemaining == 0;
@@ -208,18 +213,20 @@ public class Minefield {
 
     /**
      * Returns number of flagged tiles in the minefield.
-     * @return number of flags in the minefield.
+     *
+     * @return Number of flags in the minefield
      */
     public int getNumberOfTilesFlagged() {
         return (int) Arrays.stream(tiles).flatMap(Stream::of).filter(x -> x.getStatus() == Tile.TileStatus.FLAG).count();
     }
 
     /**
-     * Alternative way for opening tiles and can be only used on already opened tile.
+     * Alternative way for opening tiles that can be only used on already opened tile.
      * Opens all the adjacent tiles if number of flags surrounding the tile equals the number of bombs around that tile.
      * Does nothing when called on a tile location outside the bounds.
-     * @param location that's adjacent squares are tried to be opened.
-     * @return true if any of the adjacent tiles was a mine and not flagged (i.e. game should end), otherwise false.
+     *
+     * @param location that's adjacent squares are tried to be opened
+     * @return True if any of the adjacent tiles was a mine and not flagged (i.e. game should end), otherwise false
      */
     public boolean tryQuickOpening(Vector2D<Integer> location) {
         if (!isInsideBounds(location)) {
@@ -241,7 +248,8 @@ public class Minefield {
 
     /**
      * Returns the {@link GameMode} that is used currently.
-     * @return used {@link GameMode}
+     *
+     * @return Currently used {@link GameMode}
      */
     public GameMode getGameMode() {
         return gameMode;

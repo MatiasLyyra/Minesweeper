@@ -24,8 +24,9 @@ public class Tile implements ImmutableTile {
 
     /**
      * Constructs tile with given location. Tile is by default closed and doesn't contain a bomb.
-     * @param x location of the bomb in x-axis
-     * @param y location of the bomb in y-axis
+     *
+     * @param x Location of the bomb in x-axis
+     * @param y Location of the bomb in y-axis
      */
     public Tile(int x, int y) {
         status = TileStatus.CLOSED;
@@ -86,7 +87,8 @@ public class Tile implements ImmutableTile {
 
     /**
      * Sets the amount of surrounding mines.
-     * @param surroundingMines number of surrounding mines.
+     *
+     * @param surroundingMines Number of surrounding mines.
      */
     public void setNumberOfSurroundingMines(int surroundingMines) {
         this.surroundingMines = surroundingMines;
